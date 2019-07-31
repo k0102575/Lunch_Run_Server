@@ -1,9 +1,26 @@
 var express = require('express');
 var router = express.Router();
 var uuid = require('uuid');
+const datasource = require('../util/datasource')
+const connection = datasource.getConnection()
 
 router.get('/', function(req, res, next) {
     res.render('index', { title: uuid.v4() });
+});
+
+router.get('/user', function(req, res, next) {
+
+    try {
+
+        var stmt = 'select * from User';
+        connection.query(stmt, function (err, result) {
+            console.log(result)
+            res.status(200).json(result);
+        })    
+    } catch(e) {
+        res.status(500).json(e);
+    }
+
 });
 
 router.get('/test', function(req, res, next) {
