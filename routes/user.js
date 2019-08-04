@@ -22,20 +22,43 @@ router.post('/user', function(req, res, next) {
 
     try {
 
-        let body = req.body 
+        let body = req.body
 
-        var sql = 'insert into user (email, password, alias, phone) VALUES(?, password(?), ?, ?)';
+        let email = body.email
+        let phone = body.phone
 
-        var params = [body.email, body.password, body.alias, body.phone];
-        connection.query(sql, params, function(err, rows, fields){
-            if(err){
-                console.log(err);
-                res.status(500).json(err);
+        connection.query("select * from user where email = ?", email, function (err, result) {
+
+            if(result.length) {
+                res.status(409).json("email");
             } else {
-                console.log(rows)
-                res.status(200).json(rows.insertId)
+                connection.query("select * from user where phone = ?", phone, function (err, result) {
+
+                    if(result.length) {
+                        res.status(409).json("phone");
+                    } else {
+                        connection.query('insert into user (email, password, alias, phone) VALUES(?, password(?), ?, ?)', [email, body.password, body.alias, phone], function(err, rows, fields){
+                            if(err){
+                                res.status(500).json(err);
+                            } else {
+                                res.status(200).json(rows.insertId)
+                            }
+                        });
+                    }
+                })    
+                
             }
-        });
+        })    
+        
+        // connection.query('insert into user (email, password, alias, phone) VALUES(?, password(?), ?, ?)', [email, body.password, body.alias, phone], function(err, rows, fields){
+        //     if(err){
+        //         console.log(err);
+        //         res.status(500).json(err);
+        //     } else {
+        //         console.log(rows)
+        //         res.status(200).json(rows.insertId)
+        //     }
+        // });
 
     } catch(e) {
         console.log(e)
