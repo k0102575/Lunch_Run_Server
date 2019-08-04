@@ -8,21 +8,6 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: uuid.v4() });
 });
 
-router.get('/user', function(req, res, next) {
-
-    try {
-
-        var stmt = 'select * from User';
-        connection.query(stmt, function (err, result) {
-            console.log(result)
-            res.status(200).json(result);
-        })    
-    } catch(e) {
-        res.status(500).json(e);
-    }
-
-});
-
 router.get('/test', function(req, res, next) {
 
     let data = {
@@ -59,7 +44,10 @@ router.get('/test4', function(req, res, next) {
 
         let body = req.body 
 
-        if(body.restaurantId.length === 0) {
+        console.log(body)
+        console.log(body.restaurantId)
+
+        if(body.restaurantId == undefined) {
             return res.status(500).json({
                 exception: "empty value"
             });
