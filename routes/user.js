@@ -11,7 +11,7 @@ router.get('/user', function(req, res, next) {
             res.status(200).json(result);
         })    
     } catch(e) {
-        res.status(500).json(e);
+        res.status(500).json({message : e});
     }
 
 });
@@ -47,19 +47,18 @@ router.post('/user', function(req, res, next) {
             if(!err) {
                 connection.query('insert into user (email, password, alias, phone) VALUES(?, password(?), ?, ?)', [email, password, alias, phone], function(err, rows, fields){
                     if(err){
-                        res.status(500).json(err);
+                        res.status(500).json({message : err});
                     } else {
-                        res.status(200).json(rows.insertId)
+                        res.status(200).json({userId : rows.insertId})
                     }
                 });
             } else {
-                res.status(409).json(err.message);
+                res.status(409).json({message : err.message});
             }
         });
         
     } catch(e) {
-        console.log(e)
-        res.json(e);
+        res.status(500).json({message : e});
     }
 
 });
