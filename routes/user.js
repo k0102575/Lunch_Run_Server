@@ -25,7 +25,7 @@ router.post('/user', function(req, res, next) {
         var tasks = [
             function (callback) {
                 connection.query("select * from user where email = ?", email, function (err, result) {
-                    if(result.length) {
+                    if(typeof result !== 'undefined' && result.length > 0) {
                         callback(new Error('email'));
                     } else {
                         callback(null);
@@ -34,7 +34,7 @@ router.post('/user', function(req, res, next) {
             },
             function (callback) {
                 connection.query("select * from user where phone = ?", phone, function (err, result) {
-                    if(result.length) {
+                    if(typeof result !== 'undefined' && result.length > 0) {
                         callback(new Error('phone'));
                     } else {
                         callback(null);
