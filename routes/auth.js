@@ -4,7 +4,7 @@ const datasource = require('../util/datasource');
 const connection = datasource.getConnection();
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const jwtObj = require("../config/jwt");
+const jwtObj = require("../util/jwt");
 
 router.post('/login', function(req, res, next) {
 

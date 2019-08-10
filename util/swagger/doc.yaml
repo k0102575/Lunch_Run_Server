@@ -8,22 +8,67 @@ host: 54.180.89.60
 basePath: /
   
 paths:
-  /todo:
-    get:
-      summary: Returns Todo list
-      tags: [Todo]
+  /user:
+    post:
+      summary: 회원가입
+      tags: 
+      - "User"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/user"
       responses:
         200:
-          description: todo list
+          description: "{userId : 회원가입된 유저의 아이디}"
+        409:
+          description: '{"message" : "email || phone || Exception"}'
+          
+  /auth/login:
+    post:
+      summary: 로그인 토큰 받아오기
+      tags: 
+      - "Auth"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
 
+            password:
+              type: string
+
+      responses:
+        200:
+          description: "{token : 생성된 토큰}"
+        403:
+          description: '{"message" : "login failed || token failed || Exception"}'
+          
+  /auth/check:
+    post:
+      summary: 로그인 토큰 체크
+      tags: 
+      - "Auth"
+      parameters:
+      - in: "header"
+        name: "x-access-token"
+        type: string
+
+      responses:
+        200:
+          description: '{"userInfo": {회원 정보} }'
+        403:
+          description: '{"message" : "invalid token || Exception"}'
+        
 definitions:
   user:
     type: object
     properties:
-      id:
-        type: integer
-        uniqueItems: true
-        
       email:
         type: string
         format: EMAIL

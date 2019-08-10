@@ -1,11 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var uuid = require('uuid');
-const datasource = require('../util/datasource')
-const connection = datasource.getConnection()
+const express = require('express');
+const router = express.Router();
+const kakao = require("../util/kakao.js") ;
 
 router.get('/', function(req, res, next) {
-    res.render('index', { title: uuid.v4() });
+    res.render('index', {kakao: kakao});
 });
 
 module.exports = router;
