@@ -1,0 +1,168 @@
+swagger: '2.0'
+info:
+  description: LunchRun
+  version: 1.0.0
+  title: Lunch Run
+  
+host: 54.180.89.60
+basePath: /
+  
+paths:
+  /todo:
+    get:
+      summary: Returns Todo list
+      tags: [Todo]
+      responses:
+        200:
+          description: todo list
+
+definitions:
+  user:
+    type: object
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+        
+      email:
+        type: string
+        format: EMAIL
+
+      password:
+        type: string
+        format: VARCHAR(45)
+        
+      alias:
+        type: string
+        format: VARCHAR(45)
+        
+      phone:
+        type: string
+        format: VARCHAR(45)
+        pattern: '^\d{3}-\d{4}-\d{4}$'
+
+  restaurant:
+    type: object
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+        
+      name:
+        type: string
+        format: VARCHAR(45)
+        
+      floor:
+        type: integer
+        
+      introduction:
+        type: string
+        default: null
+        format: TEXT
+        
+      lat:
+        type: number
+        format: FLOAT
+        default: null
+        
+        
+      lng:
+        type: number
+        format: FLOAT
+        default: null
+      
+      address:
+        type: string
+        format: VARCHAR(255)
+        default: null
+        
+      address_road:
+        type: string
+        format: VARCHAR(255)
+        default: null
+      
+      category_id:
+        type: integer
+        $ref: '#/definitions/restaurant_category'
+
+  restaurant_category:
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+        
+      name:
+        type: string
+        format: VARCHAR(45)
+        
+  restaurant_image:
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+        
+      url:
+        type: string
+        format: VARCHAR(255)
+        
+      restaurant_id:
+        type: integer
+        $ref: '#/definitions/restaurant'
+
+  review:
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+      
+      create_datetime:
+        type: string
+        format: DATETIME
+        
+      delete_datetime:
+        type: string
+        format: DATETIME
+        default: null
+      
+      rating:
+        type: number
+        format: FLOAT
+        
+      comment:
+        type: string
+        format: TEXT
+        default: false
+        
+      user_id:
+        type: integer
+        $ref: '#/definitions/user'
+      
+      restaurant_id:
+        type: integer
+        $ref: '#/definitions/restaurant'
+        
+  review_image:
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+        
+      url:
+        type: string
+        format: VARCHAR(255)
+        
+      review_id:
+        type: integer
+        $ref: '#/definitions/review'
+    
+  ApiResponse:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      type:
+        type: string
+      message:
+        type: string
+
