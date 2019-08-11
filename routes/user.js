@@ -3,17 +3,16 @@ const router = express.Router();
 const datasource = require('../util/datasource');
 const connection = datasource.getConnection();
 const async = require('async');
+const userService = require('../service/userService.js');
 
 router.get('/user', function(req, res, next) {
-
-    try {
-        connection.query('select * from user', function (err, result) {
+    userService.getUser(function (err, result) {
+        if(!err) {
             res.status(200).json(result);
-        })    
-    } catch(e) {
-        res.status(500).json({message : e});
-    }
-
+        } else {
+            res.status(500).json({message : err});
+        }
+    });
 });
 
 router.post('/user', function(req, res, next) {
