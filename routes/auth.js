@@ -1,10 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const datasource = require('../util/datasource');
-const connection = datasource.getConnection();
-const async = require('async');
-const jwt = require('jsonwebtoken');
-const jwtObj = require("../util/jwt");
 const authService = require("../service/authService.js");
 
 router.post('/signup', function(req, res, next) {
