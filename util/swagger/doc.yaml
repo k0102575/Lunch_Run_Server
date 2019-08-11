@@ -8,11 +8,11 @@ host: 54.180.89.60
 basePath: /
   
 paths:
-  /user:
+  /auth/signup:
     post:
       summary: 회원가입
       tags: 
-      - "User"
+      - "Auth"
       parameters:
       - in: "body"
         name: "body"
@@ -23,7 +23,9 @@ paths:
         200:
           description: "{userId : 회원가입된 유저의 아이디}"
         409:
-          description: '{"message" : "email || phone || Exception"}'
+          description: '{"message" : "email || phone"}'
+        500:
+          description: '{"message" : "Exception"}'
           
   /auth/login:
     post:
@@ -47,7 +49,9 @@ paths:
         200:
           description: "{token : 생성된 토큰}"
         403:
-          description: '{"message" : "login failed || token failed || Exception"}'
+          description: '{"message" : "login failed || token failed"}'
+        500:
+          description: '{"message" : "Exception"}'
           
   /auth/check:
     post:
@@ -63,7 +67,9 @@ paths:
         200:
           description: '{"userInfo": {회원 정보} }'
         403:
-          description: '{"message" : "invalid token || Exception"}'
+          description: '{"message" : "Not Token || invalid token"}'
+        500:
+          description: '{"message" : "Exception"}'
         
 definitions:
   user:

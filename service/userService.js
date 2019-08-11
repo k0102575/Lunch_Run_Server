@@ -1,6 +1,5 @@
 const datasource = require('../util/datasource');
 const connection = datasource.getConnection();
-const async = require('async');
 
 module.exports = {
     getUser : function (callback) {
