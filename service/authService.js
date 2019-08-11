@@ -10,7 +10,6 @@ module.exports = {
         try {
 
             const {email, phone, password, alias} = param
-
     
             var tasks = [
                 function (callback) {

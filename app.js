@@ -12,6 +12,8 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
+const restaurantCategoryRouter = require('./routes/restaurantCategory');
+const restaurantRouter = require('./routes/restaurant');
 
 const app = express();
 
@@ -29,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/', userRouter);
 app.use('/auth', authRouter);
+app.use('/', restaurantRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler
