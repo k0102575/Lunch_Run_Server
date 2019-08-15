@@ -1,8 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const authService = require("../service/authService.js");
+const { check, validationResult } = require('express-validator');
 
-router.post('/signup', function(req, res, next) {
+router.post('/signup', [
+    check('email').isEmail(),
+    check('password').exists(),
+    check('alias').exists(),
+    check('phone').exists(),
+  ], function(req, res) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
 
     const param = {
         email : req.body.email, 
