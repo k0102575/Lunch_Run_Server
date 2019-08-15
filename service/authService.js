@@ -60,7 +60,7 @@ module.exports = {
             async.waterfall([
                 function(callback) {
                     connection.query("select id, email, alias, phone from user where email = ? and password = password(?)", [email, password], function (e, result) {
-                        if(result.length) {
+                        if(typeof result !== 'undefined' && result.length > 0) {
                             callback(null, result[0])
                         } else {
                             callback("login failed", null)
