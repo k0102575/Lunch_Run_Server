@@ -23,9 +23,20 @@ paths:
         200:
           description: "{userId : 회원가입된 유저의 아이디}"
         409:
-          description: '{"message" : "email || phone"}'
+          description: '중복된 회원 정보로 가입 시도시 :   {"message" : "email || phone"}'
+        422:
+          description: 'parameter value 유효성 체크 : {
+                            "errors": [
+                                {
+                                    "value": "***",
+                                    "msg": "Invalid value",
+                                    "param": "email || phone || alias || phone",
+                                    "location": "body"
+                                }
+                            ]
+                        }'
         500:
-          description: '{"message" : "Exception"}'
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
           
   /auth/login:
     post:
@@ -49,9 +60,20 @@ paths:
         200:
           description: "{token : 생성된 토큰}"
         403:
-          description: '{"message" : "login failed || token failed"}'
+          description: '회원 정보에 맞지 않은 값으로 로그인 시도시 : {"message" : "login failed || token failed"}'
+        422:
+          description: 'parameter value 유효성 체크 : {
+                            "errors": [
+                                {
+                                    "value": "***",
+                                    "msg": "Invalid value",
+                                    "param": "email || password",
+                                    "location": "body"
+                                }
+                            ]
+                        }'
         500:
-          description: '{"message" : "Exception"}'
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
           
   /auth/check:
     post:
@@ -67,9 +89,9 @@ paths:
         200:
           description: '{"userInfo": {회원 정보} }'
         403:
-          description: '{"message" : "Not Token || invalid token"}'
+          description: '토큰이 없거나 토큰이 맞지 않을때 : {"message" : "Not Token || invalid token"}'
         500:
-          description: '{"message" : "Exception"}'
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
 
   /restaurantCategory:
     get:
@@ -90,7 +112,66 @@ paths:
         403:
           description: '{"message" : "Not Token || invalid token"}'
         500:
-          description: '{"message" : "Exception"}'
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+      security:
+        - api_key: []
+
+  /restaurant:
+    post:
+      summary: 식당 정보 입력
+      tags:
+      - restaurant
+      parameters:
+      - in: "header"
+        name: "x-access-token"
+        type: string
+      responses:
+        200:
+          description: "{restaurantId : 입력된 식당의 아이디}"
+        403:
+          description: '{"message" : "Not Token || invalid token"}'
+        422:
+          description: 'parameter value 유효성 체크 : {
+                            "errors": [
+                                {
+                                    "value": "***",
+                                    "msg": "Invalid value",
+                                    "param": "name || floor || lat || lng || category_id",
+                                    "location": "body"
+                                }
+                            ]
+                        }'
+        500:
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+      security:
+        - api_key: []
+        
+    put:
+      summary: 식당 정보 수정
+      tags:
+      - restaurant
+      parameters:
+      - in: "header"
+        name: "x-access-token"
+        type: string
+      responses:
+        200:
+          description: "{restaurantId : 변경된 식당의 아이디}"
+        403:
+          description: '{"message" : "Not Token || invalid token"}'
+        422:
+          description: 'parameter value 유효성 체크 : {
+                            "errors": [
+                                {
+                                    "value": "***",
+                                    "msg": "Invalid value",
+                                    "param": "name || floor || lat || lng || category_id || id",
+                                    "location": "body"
+                                }
+                            ]
+                        }'
+        500:
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
       security:
         - api_key: []
           

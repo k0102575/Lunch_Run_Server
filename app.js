@@ -32,6 +32,7 @@ app.use('/', indexRouter);
 app.use('/', userRouter);
 app.use('/auth', authRouter);
 app.use('/', restaurantRouter);
+app.use('/', restaurantCategoryRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler

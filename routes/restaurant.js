@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const restaurantService = require('../service/restaurantService.js');
 const authMiddleware = require('../service/authMiddlewareService.js');
+const { check, validationResult } = require('express-validator');
 
 router.use('/restaurant', authMiddleware)
 router.get('/restaurant', function(req, res, next) {
@@ -9,7 +10,19 @@ router.get('/restaurant', function(req, res, next) {
 });
 
 router.use('/restaurant', authMiddleware)
-router.post('/restaurant', function(req, res, next) {
+router.post('/restaurant', [
+    check('name').not().isEmpty(),
+    check('floor').isInt(),
+    check('lat').isFloat(),
+    check('lng').isFloat(),
+    check('category_id').not().isEmpty()
+  ], function(req, res, next) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     const param = {
         name : req.body.name,
         floor : req.body.floor,
@@ -33,7 +46,20 @@ router.post('/restaurant', function(req, res, next) {
 });
 
 router.use('/restaurant', authMiddleware)
-router.put('/restaurant', function(req, res, next) {
+router.put('/restaurant', [
+    check('name').not().isEmpty(),
+    check('floor').isInt(),
+    check('lat').isFloat(),
+    check('lng').isFloat(),
+    check('category_id').not().isEmpty(),
+    check('id').not().isEmpty()
+  ], function(req, res, next) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     const param = {
         id: req.body.id,
         name : req.body.name,
@@ -47,9 +73,6 @@ router.put('/restaurant', function(req, res, next) {
     }
 
     restaurantService.updateRestaurant(param, function (status, err, result) {
-        // console.log(status)
-        // console.log(err)
-        // console.log(result)
         if(err) {
             if(status == 500) console.log(err);
             res.status(status).json({message : err})

@@ -5,9 +5,9 @@ const { check, validationResult } = require('express-validator');
 
 router.post('/signup', [
     check('email').isEmail(),
-    check('password').exists(),
-    check('alias').exists(),
-    check('phone').exists(),
+    check('password').not().isEmpty(),
+    check('alias').not().isEmpty(),
+    check('phone').not().isEmpty(),
   ], function(req, res) {
 
     const errors = validationResult(req);
@@ -35,7 +35,15 @@ router.post('/signup', [
 
 });
 
-router.post('/login', function(req, res, next) {
+router.post('/login', [
+    check('email').isEmail(),
+    check('password').not().isEmpty()
+  ], function(req, res, next) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
 
     const param = {
         email : req.body.email,
