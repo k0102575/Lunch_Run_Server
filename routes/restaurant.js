@@ -58,7 +58,7 @@ router.post('/restaurant', [
     const param = {
         name : req.body.name,
         floor : req.body.floor,
-        introduction : req.body.introduction,
+        url : req.body.url,
         lat : req.body.lat,
         lng : req.body.lng,
         address : req.body.address,
@@ -96,7 +96,7 @@ router.put('/restaurant', [
         id: req.body.id,
         name : req.body.name,
         floor : req.body.floor,
-        introduction : req.body.introduction,
+        url : req.body.url,
         lat : req.body.lat,
         lng : req.body.lng,
         address : req.body.address,

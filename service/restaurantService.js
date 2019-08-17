@@ -36,9 +36,9 @@ module.exports = {
     },
     insertRestaurant : function (param, callback) {
         try {
-            const {name, floor, introduction, lat, lng, address, address_road, category_id} = param
+            const {name, floor, url, lat, lng, address, address_road, category_id} = param
 
-            connection.query('insert into restaurant (name, floor, introduction, lat, lng, address, address_road, category_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', [name, floor, introduction, lat, lng, address, address_road, category_id], function(err, rows, fields){
+            connection.query('insert into restaurant (name, floor, url, lat, lng, address, address_road, category_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', [name, floor, url, lat, lng, address, address_road, category_id], function(err, rows, fields){
                 if(err){
                     callback(500, err.message, null);
                 } else {
@@ -52,9 +52,9 @@ module.exports = {
     },
     updateRestaurant : function (param, callback) {
         try {
-            const {id, name, floor, introduction, lat, lng, address, address_road, category_id} = param
+            const {id, name, floor, url, lat, lng, address, address_road, category_id} = param
 
-            connection.query('update restaurant SET name = ?, floor = ?, introduction = ?, lat = ?, lng =?, address = ?, address_road = ?, category_id = ? where id = ?', [name, floor, introduction, lat, lng, address, address_road, category_id, id], function(err, rows, fields){
+            connection.query('update restaurant SET name = ?, floor = ?, url = ?, lat = ?, lng =?, address = ?, address_road = ?, category_id = ? where id = ?', [name, floor, url, lat, lng, address, address_road, category_id, id], function(err, rows, fields){
                 if(err){
                     callback(500, err.message.sqlMessage, null);
                 } else {
