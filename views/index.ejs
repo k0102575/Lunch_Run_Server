@@ -57,6 +57,67 @@ var marker = new kakao.maps.Marker({
 
 marker.setMap(map);
 
+var places = new kakao.maps.services.Places();
+
+var array = []
+
+var callback = function(result, status, pagination) {
+    if (status === kakao.maps.services.Status.OK) {
+
+      for (var i = 0; i < result.length; i++) {
+        array.push(result[i])
+      }
+
+      if(pagination.hasNextPage) {
+        pagination.nextPage()
+      } else {
+        searchFinish()
+      }
+
+    }
+};
+
+places.keywordSearch('연남동 점심', callback);
+
+
+const searchFinish = () => {
+    var html = "INSERT INTO `restaurant` (`name`, `floor`, `introduction`, `lat`, `lng`, `address`, `address_road`, `category_id`) VALUES"
+    // let html = "INSERT INTO `restaurant` (`id`, `name`, `floor`, `introduction`, `lat`, `lng`, `address`, `address_road`, `category_id`)\
+    //             VALUES\
+    //             (1, '진짜파스타', 0, NULL, 37.5502, 126.923, '서울 마포구 상수동 86-22', '서울 마포구 와우산로 64', 4);"
+    
+    for (var i = 0; i < array.length; i++) {
+        console.log(array[i])
+        console.log(categoryId(array[i].category_name))
+
+        if(categoryId(array[i].category_name) != undefined) {
+            html += "('"+array[i].place_name+"', 0, '"+array[i].place_url+"', '"+array[i].y+"', '"+array[i].x+"', '"+array[i].address_name+"', '"+array[i].road_address_name+"', '"+categoryId(array[i].category_name)+"'),"
+        }
+    }
+
+    console.log(html)
+}
+
+const categoryId = (value) => {
+    if(value.includes("양식")) {
+        return "4"
+    } else if(value.includes("일식")) {
+        return "3"
+    } else if(value.includes("중식")) {
+        return "2"
+    } else if(value.includes("카페")) {
+        return "7"
+    } else if(value.includes("분식")) {
+        return "5"
+    } else if(value.includes("한식")) {
+        return "1"
+    } else if(value.includes("간식")) {
+        return "8"
+    } else if(value.includes("뷔페")) {
+        return "1"
+    }
+}
+
 </script>
 </body>
 </html>

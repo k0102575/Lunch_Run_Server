@@ -5,7 +5,39 @@ const authMiddleware = require('../service/authMiddlewareService.js');
 const { check, validationResult } = require('express-validator');
 
 router.use('/restaurant', authMiddleware)
+router.get('/restaurant/point', function(req, res, next) {
+    
+    const param = {
+        category_id : req.body.category_id
+    }
+
+    restaurantService.selectRestaurantPoint(param, (status, err, result) => {
+        if(err) {
+            if(status == 500) console.log(err);
+            res.status(status).json({message : err})
+        } else {
+            res.status(200).json(result)
+        }
+    })
+
+});
+
+router.use('/restaurant', authMiddleware)
 router.get('/restaurant', function(req, res, next) {
+    
+    const param = {
+        page : req.body.page,
+        category_id : req.body.category_id
+    }
+
+    restaurantService.selectRestaurant(param, (status, err, result) => {
+        if(err) {
+            if(status == 500) console.log(err);
+            res.status(status).json({message : err})
+        } else {
+            res.status(200).json(result)
+        }
+    })
 
 });
 
@@ -82,6 +114,29 @@ router.put('/restaurant', [
 
     })
 });
+
+router.use('/restaurant', authMiddleware)
+router.delete('/restaurant/:id', function(req, res, next) {
+
+    if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
+        return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
+    }
+
+    const param = {
+        id: req.params.id,
+    }
+
+    restaurantService.deleteRestaurant(param, function (status, err, result) {
+        if(err) {
+            if(status == 500) console.log(err);
+            res.status(status).json({message : err})
+        } else {
+            res.status(200).json({"result": true})
+        }
+
+    })
+});
+
 
 
 
