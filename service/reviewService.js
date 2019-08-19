@@ -2,9 +2,11 @@ const datasource = require('../util/datasource');
 const connection = datasource.getConnection();
 
 module.exports = {
-    selectReview: function (param, callback) {
-        const {restaurant_id} = param
-        connection.query('select * from review where delete_datetime is null and restaurant_id', [restaurant_id] , function(err, rows, fields){
+    getReviewList: function (param, callback) {
+        const {restaurant_id, page} = param
+        let row = (page != undefined) ? page : 0
+
+        connection.query('select * from review where delete_datetime is null and restaurant_id = ? limit ? , 10', [restaurant_id, row] , function(err, rows, fields){
             if(err){
                 callback(500, err.message, null);
             } else {

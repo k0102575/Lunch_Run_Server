@@ -11,7 +11,7 @@ router.get('/restaurant/point', function(req, res, next) {
         category_id : req.body.category_id
     }
 
-    restaurantService.selectRestaurantPoint(param, (status, err, result) => {
+    restaurantService.getRestaurantPoint(param, (status, err, result) => {
         if(err) {
             if(status == 500) console.log(err);
             res.status(status).json({message : err})
@@ -30,7 +30,7 @@ router.get('/restaurant', function(req, res, next) {
         category_id : req.body.category_id
     }
 
-    restaurantService.selectRestaurant(param, (status, err, result) => {
+    restaurantService.getRestaurantList(param, (status, err, result) => {
         if(err) {
             if(status == 500) console.log(err);
             res.status(status).json({message : err})
@@ -39,6 +39,28 @@ router.get('/restaurant', function(req, res, next) {
         }
     })
 
+});
+
+router.use('/restaurant/:id', authMiddleware)
+router.get('/restaurant/:id', function(req, res, next) {
+
+    if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
+        return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
+    }
+
+    const param = {
+        id: req.params.id,
+    }
+
+    restaurantService.getRestaurant(param, function (status, err, result) {
+        if(err) {
+            if(status == 500) console.log(err);
+            res.status(status).json({message : err})
+        } else {
+            res.status(200).json({"restaurant": result})
+        }
+
+    })
 });
 
 router.use('/restaurant', authMiddleware)
@@ -63,7 +85,8 @@ router.post('/restaurant', [
         lng : req.body.lng,
         address : req.body.address,
         address_road : req.body.address_road,
-        category_id : req.body.category_id
+        category_id : req.body.category_id,
+        tags : req.body.tags
     }
 
     restaurantService.insertRestaurant(param, function (status, err, result) {
@@ -101,7 +124,8 @@ router.put('/restaurant', [
         lng : req.body.lng,
         address : req.body.address,
         address_road : req.body.address_road,
-        category_id : req.body.category_id
+        category_id : req.body.category_id,
+        tags : req.body.tags
     }
 
     restaurantService.updateRestaurant(param, function (status, err, result) {
@@ -115,7 +139,7 @@ router.put('/restaurant', [
     })
 });
 
-router.use('/restaurant', authMiddleware)
+router.use('/restaurant/:id', authMiddleware)
 router.delete('/restaurant/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {

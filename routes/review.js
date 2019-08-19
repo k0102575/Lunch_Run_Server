@@ -6,7 +6,6 @@ const { check, validationResult } = require('express-validator');
 
 router.use('/review', authMiddleware)
 router.get('/review', [
-    check('rating').not().isEmpty(),
     check('restaurant_id').not().isEmpty()
   ], function(req, res, next) {
 
@@ -16,10 +15,11 @@ router.get('/review', [
     }
     
     const param = {
+        page : req.body.page,
         restaurant_id : req.body.restaurant_id
     }
 
-    reviewService.selectReview(param, (status, err, result) => {
+    reviewService.getReviewList(param, (status, err, result) => {
         if(err) {
             if(status == 500) console.log(err);
             res.status(status).json({message : err})
@@ -109,8 +109,5 @@ router.delete('/review/:id', function(req, res, next) {
 
     })
 });
-
-
-
 
 module.exports = router;

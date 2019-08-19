@@ -116,7 +116,6 @@ paths:
       security:
         - api_key: []
 
-
   /restaurant_point:
     get:
       summary: 식당 지도 포인트 정보
@@ -402,6 +401,29 @@ paths:
           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
       security:
         - api_key: []
+
+  /tag:
+    get:
+      summary: 태그 리스트
+      tags:
+      - tag
+      parameters:
+      - in: "header"
+        name: "x-access-token"
+        type: string
+      responses:
+        200:
+          description: "태그 리스트"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/restaurant_category"
+        403:
+          description: '{"message" : "Not Token || invalid token"}'
+        500:
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+      security:
+        - api_key: []
         
 definitions:
   user:
@@ -534,3 +556,13 @@ definitions:
       review_id:
         type: integer
         $ref: '#/definitions/review'
+
+  tag:
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+        
+      name:
+        type: string
+        format: VARCHAR(45)
