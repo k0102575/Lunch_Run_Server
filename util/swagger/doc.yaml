@@ -162,7 +162,7 @@ paths:
             type: integer
       responses:
         200:
-          description: '[{"id": **, "name": "***", "floor": **, "introduction": "http://place.map.kakao.com/******", "lat": ***, "lng": ***, "address": "*****", "address_road": "*****", "category_id": *}]'
+          description: '[{"id": **, "name": "***", "floor": **, "url": "http://place.map.kakao.com/******", "lat": ***, "lng": ***, "address": "*****", "address_road": "*****", "category_id": *}]'
         403:
           description: '{"message" : "Not Token || invalid token"}'
         500:
@@ -182,7 +182,45 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/restaurant"
+        type: object
+        properties:
+          name:
+            type: string
+            format: VARCHAR(45)
+            
+          floor:
+            type: integer
+            
+          url:
+            type: string
+            format: TEXT
+            
+          lat:
+            type: number
+            format: FLOAT
+            
+          lng:
+            type: number
+            format: FLOAT
+          
+          address:
+            type: string
+            format: VARCHAR(255)
+            default: null
+            
+          address_road:
+            type: string
+            format: VARCHAR(255)
+            default: null
+          
+          category_id:
+            type: integer
+          
+          tags:
+            type: array
+            items:
+              type: integer
+          
       responses:
         200:
           description: "{restaurantId : 입력된 식당의 아이디}"
@@ -216,7 +254,46 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/restaurant"
+        type: object
+        properties:
+          id:
+            type: integer
+
+          name:
+            type: string
+            format: VARCHAR(45)
+            
+          floor:
+            type: integer
+            
+          url:
+            type: string
+            format: TEXT
+            
+          lat:
+            type: number
+            format: FLOAT
+            
+          lng:
+            type: number
+            format: FLOAT
+          
+          address:
+            type: string
+            format: VARCHAR(255)
+            
+          address_road:
+            type: string
+            format: VARCHAR(255)
+          
+          category_id:
+            type: integer
+          
+          tags:
+            type: array
+            items:
+              type: integer
+
       responses:
         200:
           description: "{restaurantId : 변경된 식당의 아이디}"
@@ -237,7 +314,37 @@ paths:
           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
       security:
         - api_key: []
+        
   /restaurant/{id}:
+    get:
+      summary: 식당 정보 가져오기
+      tags:
+      - restaurant
+      parameters:
+      - in: "header"
+        name: "x-access-token"
+        type: string
+      responses:
+        200:
+          description: '{"restaurant": {"id": 0,"name": "string","floor": 0,"url": "string","lat": 0,"lng": 0,"address": "string","address_road": "string","category_id": 0,"tags": [0]}}'
+        403:
+          description: '{"message" : "Not Token || invalid token"}'
+        422:
+          description: 'parameter value 유효성 체크 : {
+                            "errors": [
+                                {
+                                    "value": "***",
+                                    "msg": "Invalid value",
+                                    "param": "id",
+                                    "location": "Path Variable"
+                                }
+                            ]
+                        }'
+        500:
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+      security:
+        - api_key: []
+
     delete:
       summary: 식당 정보 삭제
       tags:
@@ -282,6 +389,8 @@ paths:
         type: object
         properties:
           restaurant_id:
+            type: integer
+          page:
             type: integer
       responses:
         200:
@@ -460,7 +569,7 @@ definitions:
       floor:
         type: integer
         
-      introduction:
+      url:
         type: string
         default: null
         format: TEXT
