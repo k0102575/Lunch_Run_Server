@@ -4,8 +4,8 @@ const restaurantService = require('../service/restaurantService.js');
 const authMiddleware = require('../service/authMiddlewareService.js');
 const { check, validationResult } = require('express-validator');
 
-router.use('/restaurant', authMiddleware)
-router.get('/restaurant/point', function(req, res, next) {
+router.use('/restaurant_point', authMiddleware)
+router.get('/restaurant_point', function(req, res, next) {
     
     const param = {
         category_id : req.body.category_id
