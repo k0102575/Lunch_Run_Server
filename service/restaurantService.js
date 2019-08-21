@@ -11,7 +11,7 @@ module.exports = {
         }
         let row = (page != undefined) ? page : 0
 
-        connection.query('select * from restaurant where delete_datetime is null' + where + ' limit ' + row + ' ,10' , function(err, rows, fields){
+        connection.query('select r.*, ifnull(round((select avg(rating) from review re where re.restaurant_id = r.id ),1), 0) as rating from restaurant r where r.delete_datetime is null' + where + ' limit ' + (row * 10) + ' ,10' , function(err, rows, fields){
             if(err){
                 callback(500, err.message, null);
             } else {

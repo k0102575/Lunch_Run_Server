@@ -24,50 +24,157 @@
   <title>Document</title>
 </head>
 <style>
-  
-  body {
-    margin: 0px;
-  }
 
-  #map {
-    width: 100vw;
-    height: 100vh;
-  }
+    body {
+        margin: 0px;
+    }
+
+    #map {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .label {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+    }
+
+    .b-blue {
+        background: blue;
+    }
+
+    .b-red {
+        background: red;
+    }
+
+    .b-white {
+        background: white;
+    }
+
+    .b-black {
+        background: black;
+    }
+
+    .b-pink {
+        background: pink;
+    }
+
+    .b-yellow {
+        background: yellow;
+    }
+
+    .b-brown {
+        background: brown;
+    }
+
+    .b-purple {
+        background: purple;
+    }
+
+    .b-green {
+        background: green;
+    }
+
+    .b-orange {
+        background: orange;
+    }
 </style>
+
 <body>
   <div id="map" class="map"></div>
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%=kakao.appkey%>&libraries=services"></script>
-
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%=kakao.appkey%>&libraries=services,clusterer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
 
-var container = document.getElementById('map');
-var options = {
-  center: new kakao.maps.LatLng(<%=kakao.lat%>, <%=kakao.lng%>),
-  level: 3
-};
+let container,
+    options,
+    map,
+    markerPosition,
+    marker,
+    customOverlayArray
 
-var map = new kakao.maps.Map(container, options);
+container = document.getElementById('map');
+options = {center: new kakao.maps.LatLng(<%=kakao.lat%>, <%=kakao.lng%>),level: 3};
 
-var markerPosition  = new kakao.maps.LatLng(<%=kakao.lat%>, <%=kakao.lng%>); 
+$(document).ready(function () {
 
-var marker = new kakao.maps.Marker({
-    position: markerPosition
-});
+    map = new kakao.maps.Map(container, options);
 
-marker.setMap(map);
+    markerPosition  = new kakao.maps.LatLng(<%=kakao.lat%>, <%=kakao.lng%>); 
 
-var places = new kakao.maps.services.Places();
+    marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
 
-var array = []
+    marker.setMap(map);
 
-var callback = function(result, status, pagination) {
-    if (status === kakao.maps.services.Status.OK) {
-      console.log(result)
+  $.ajax({
+    type : 'get',
+    url : '/restaurant_point',
+    dataType : 'json',
+    beforeSend : function(xhr){
+        xhr.setRequestHeader("x-access-token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiYWxpYXMiOiLthYzsmKQiLCJpYXQiOjE1NjYzNTg4NDIsImV4cCI6MTU2NzU2ODQ0MiwiaXNzIjoidGhlby5raW1AdHJpcGxsbGV0LmNvbSIsInN1YiI6InVzZXJJbmZvIn0.irPcb8_iy4YmX1QdpUUcGnbNAStM8PkXxkOf-eX4bQg");
+    },
+    success : function(response){
+        customOverlayArray = $(response).map(function(i, data) {
+            return new kakao.maps.CustomOverlay({
+                position: new kakao.maps.LatLng(data.lat, data.lng),
+                content: categoryColor(data.category_id)   
+            });
+        });
+
+        for (var i = 0; i < customOverlayArray.length; i++) {
+            customOverlayArray[i].setMap(map);
+        }
+
+    },
+    error: function(xhr, status, error){
+        console.log(xhr)
+        console.log(status)
+        console.log(err)
     }
-};
+  });
 
-places.keywordSearch('사루카메', callback);
+})
+
+const categoryColor = (category)=> {
+    switch (category) {
+        case 1:
+            return '<div class ="label b-blue"></div>'
+        break;
+        case 2:
+            return '<div class ="label b-red"></div>'
+        break;
+        case 3:
+            return '<div class ="label b-white"></div>'
+        break;
+        case 4:
+            return '<div class ="label b-black"></div>'
+        break;
+        case 5:
+            return '<div class ="label b-pink"></div>'
+        break;
+        case 6:
+            return '<div class ="label b-yellow"></div>'
+        break;
+        case 7:
+            return '<div class ="label b-brown"></div>'
+        break;
+        case 8:
+            return '<div class ="label b-purple"></div>'
+        break;
+        case 9:
+            return '<div class ="label b-green"></div>'
+        break;
+        case 10:
+            return '<div class ="label b-orange"></div>'
+        break;
+            
+    }
+}
+
+
 
 </script>
 </body>

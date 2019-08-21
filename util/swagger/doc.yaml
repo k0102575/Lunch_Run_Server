@@ -162,7 +162,7 @@ paths:
             type: integer
       responses:
         200:
-          description: '[{"id": **, "name": "***", "floor": **, "url": "http://place.map.kakao.com/******", "lat": ***, "lng": ***, "address": "*****", "address_road": "*****", "category_id": *}]'
+          description: '[{"id": **, "name": "***", "floor": **, "url": "http://place.map.kakao.com/******", "lat": ***, "lng": ***, "address": "*****", "address_road": "*****", "category_id": *, "rating": "*"}]'
         403:
           description: '{"message" : "Not Token || invalid token"}'
         500:
