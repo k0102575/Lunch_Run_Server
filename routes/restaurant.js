@@ -8,7 +8,7 @@ router.use('/restaurant_point', authMiddleware)
 router.get('/restaurant_point', function(req, res, next) {
     
     const param = {
-        category_id : req.body.category_id
+        category_id : req.query.category_id
     }
 
     restaurantService.getRestaurantPoint(param, (status, err, result) => {
@@ -26,8 +26,8 @@ router.use('/restaurant', authMiddleware)
 router.get('/restaurant', function(req, res, next) {
     
     const param = {
-        page : req.body.page,
-        category_id : req.body.category_id
+        page : req.query.page,
+        category_id : req.query.category_id
     }
 
     restaurantService.getRestaurantList(param, (status, err, result) => {

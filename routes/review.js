@@ -15,8 +15,8 @@ router.get('/review', [
     }
     
     const param = {
-        page : req.body.page,
-        restaurant_id : req.body.restaurant_id
+        page : req.query.page,
+        restaurant_id : req.query.restaurant_id
     }
 
     reviewService.getReviewList(param, (status, err, result) => {
