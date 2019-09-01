@@ -30,7 +30,7 @@ function handleDisconnect() {
   
       console.log('Re-connecting lost connection: ' + err.stack);
   
-      connection = mysql.createConnection(conn.config);
+      connection = mysql.createConnection(db_config);
       handleDisconnect();
     });
 }

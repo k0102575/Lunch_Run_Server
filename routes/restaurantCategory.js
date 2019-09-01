@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const restaurantCategoryService = require('../service/restaurantCategoryService.js');
-const authMiddleware = require('../service/authMiddlewareService.js');
 
-router.use('/restaurantCategory', authMiddleware)
 router.get('/restaurantCategory', function(req, res, next) {
 
     restaurantCategoryService.getCategory(function (err, result) {

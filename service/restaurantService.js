@@ -4,14 +4,26 @@ const async = require('async');
 
 module.exports = {
     getRestaurantList: function (param, callback) {
-        const {category_id, page} = param
+        const {page, user_id, category_id, tag_id} = param
         let where = ''
         if(category_id != undefined) {
-            where = ' and category_id = ' + category_id
+            where += ' and category_id = ' + category_id
         }
+        if(tag_id != undefined) {
+            where += ' and t.id = ' + tag_id
+        }
+
         let row = (page != undefined) ? page : 0
 
-        connection.query('select r.*, ifnull(round((select avg(rating) from review re where re.restaurant_id = r.id ),1), 0) as rating from restaurant r where r.delete_datetime is null' + where + ' limit ' + (row * 10) + ' ,10' , function(err, rows, fields){
+        connection.query('select r.*, \
+                            ifnull(round((select avg(rating) from review re where re.restaurant_id = r.id ),1), 0) as rating,\
+                            ifnull((select count(*) from restaurant_favorite rf where rf.restaurant_id = r.id and rf.user_id = ' + user_id + '), 0) as favorite,\
+                            group_concat(t.name) as tag\
+                            from restaurant r\
+                            left join restaurant_tag rt on r.id = rt.restaurant_id\
+                            left join tag t on rt.tag_id = t.id\
+                            where r.delete_datetime is null ' + where + '\
+                            group by r.id limit ' + (row * 10) + ' ,10' , function(err, rows, fields){
             if(err){
                 callback(500, err.message, null);
             } else {

@@ -27,7 +27,9 @@ router.get('/restaurant', function(req, res, next) {
     
     const param = {
         page : req.query.page,
-        category_id : req.query.category_id
+        user_id : req.user.id,
+        category_id : req.query.category_id,
+        tag_id : req.query.tag_id
     }
 
     restaurantService.getRestaurantList(param, (status, err, result) => {

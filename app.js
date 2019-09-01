@@ -14,6 +14,7 @@ const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const restaurantCategoryRouter = require('./routes/restaurantCategory');
 const restaurantRouter = require('./routes/restaurant');
+const restaurantFavoriteRouter = require('./routes/restaurantFavorite');
 const reviewRouter = require('./routes/review');
 const tagRouter = require('./routes/tag');
 
@@ -37,6 +38,7 @@ app.use('/', restaurantRouter);
 app.use('/', restaurantCategoryRouter);
 app.use('/', reviewRouter);
 app.use('/', tagRouter);
+app.use('/', restaurantFavoriteRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler

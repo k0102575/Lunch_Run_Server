@@ -98,10 +98,6 @@ paths:
       summary: 식당 카테고리 정보 리스트
       tags:
       - restaurant_category
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
       responses:
         200:
           description: "카테고리 리스트"
@@ -516,10 +512,6 @@ paths:
       summary: 태그 리스트
       tags:
       - tag
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
       responses:
         200:
           description: "태그 리스트"
