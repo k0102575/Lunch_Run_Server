@@ -4,6 +4,7 @@ var swaggerDefinition = {
     version: '1.0.0',
     description: 'Lunch Run Project',
   },
+  components: {},
   host: '54.180.89.60',
   basePath: '/'
 }

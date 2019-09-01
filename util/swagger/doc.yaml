@@ -105,12 +105,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/restaurant_category"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
         500:
           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
 
   /restaurant_point:
     get:
@@ -413,6 +409,102 @@ paths:
       security:
         - api_key: []
 
+  /restaurant_favorite:
+    get:
+      summary: 내가 좋아하는 식당 리스트
+      tags:
+      - restaurant_favorite
+      parameters:
+        - in: "header"
+          name: "x-access-token"
+          type: string
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: '[{
+            "id": **, 
+            "name": ***, 
+            "floor": **, 
+            "url": "http://place.map.kakao.com/******", 
+            "lat": ***, 
+            "lng": ***, 
+            "address": "*****", 
+            "address_road": "*****", 
+            "category_id": *, 
+            "rating": *, 
+            "favorite" : "1", 
+            "tag" : ***
+          }]'
+        403:
+          description: '{"message" : "Not Token || invalid token"}'
+        500:
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+      security:
+        - api_key: []
+
+  /restaurant_favorite/{id}:
+    post:
+      summary: 내가 좋아하는 식당 추가
+      tags:
+      - restaurant_favorite
+      parameters:
+      - in: "header"
+        name: "x-access-token"
+        type: string
+      responses:
+        200:
+          description: '{"result": true}'
+        403:
+          description: '{"message" : "Not Token || invalid token"}'
+        422:
+          description: 'parameter value 유효성 체크 : {
+                            "errors": [
+                                {
+                                    "value": "***",
+                                    "msg": "Invalid value",
+                                    "param": "id",
+                                    "location": "Path Variable"
+                                }
+                            ]
+                        }'
+        500:
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+      security:
+        - api_key: []
+
+    delete:
+      summary: 내가 좋아하는 식당 삭제
+      tags:
+      - restaurant_favorite
+      parameters:
+      - in: "header"
+        name: "x-access-token"
+        type: string
+      responses:
+        200:
+          description: '{"result": true}'
+        403:
+          description: '{"message" : "Not Token || invalid token"}'
+        422:
+          description: 'parameter value 유효성 체크 : {
+                            "errors": [
+                                {
+                                    "value": "***",
+                                    "msg": "Invalid value",
+                                    "param": "id",
+                                    "location": "Path Variable"
+                                }
+                            ]
+                        }'
+        500:
+          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+      security:
+        - api_key: []
+
   /review:
     get:
       summary: 리뷰 리스트
@@ -562,12 +654,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/restaurant_category"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
         500:
           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
         
 definitions:
   user:
