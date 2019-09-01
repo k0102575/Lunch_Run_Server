@@ -17,6 +17,8 @@ const restaurantRouter = require('./routes/restaurant');
 const restaurantFavoriteRouter = require('./routes/restaurantFavorite');
 const reviewRouter = require('./routes/review');
 const tagRouter = require('./routes/tag');
+const reportTypeRouter = require('./routes/reportType');
+const restaurantReportRouter = require('./routes/reportType');
 
 const app = express();
 
@@ -38,7 +40,9 @@ app.use('/', restaurantRouter);
 app.use('/', restaurantCategoryRouter);
 app.use('/', reviewRouter);
 app.use('/', tagRouter);
+app.use('/', reportTypeRouter);
 app.use('/', restaurantFavoriteRouter);
+app.use('/', restaurantReportRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler
