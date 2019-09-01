@@ -8,7 +8,8 @@ router.use('/restaurant_point', authMiddleware)
 router.get('/restaurant_point', function(req, res, next) {
     
     const param = {
-        category_id : req.query.category_id
+        category_id : req.query.category_id,
+        tag_id : req.query.tag_id
     }
 
     restaurantService.getRestaurantPoint(param, (status, err, result) => {

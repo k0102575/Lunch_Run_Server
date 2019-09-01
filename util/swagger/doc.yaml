@@ -144,21 +144,27 @@ paths:
       tags:
       - restaurant
       parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: false
-        type: object
-        properties:
-          category_id:
+        - in: "header"
+          name: "x-access-token"
+          type: string
+        - in: query
+          name: page
+          required: false
+          schema:
             type: integer
-          page:
+        - in: query
+          name: category_id
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: tag_id
+          required: false
+          schema:
             type: integer
       responses:
         200:
-          description: '[{"id": **, "name": "***", "floor": **, "url": "http://place.map.kakao.com/******", "lat": ***, "lng": ***, "address": "*****", "address_road": "*****", "category_id": *, "rating": "*"}]'
+          description: '[{"id": **, "name": "***", "floor": **, "url": "http://place.map.kakao.com/******", "lat": ***, "lng": ***, "address": "*****", "address_road": "*****", "category_id": *, "rating": "*", "favorite" : "0 || 1", "tag" : "******"}]'
         403:
           description: '{"message" : "Not Token || invalid token"}'
         500:
@@ -547,6 +553,17 @@ definitions:
         format: VARCHAR(45)
         pattern: '^\d{3}-\d{4}-\d{4}$'
 
+  report_type:
+    type: object
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+        
+      name:
+        type: string
+        format: VARCHAR(45)
+
   restaurant:
     type: object
     properties:
@@ -583,6 +600,11 @@ definitions:
         type: string
         format: VARCHAR(255)
         default: null
+
+      delete_datetime:
+        type: string
+        format: DATETIME
+        default: null
       
       category_id:
         type: integer
@@ -598,16 +620,57 @@ definitions:
         type: string
         format: VARCHAR(45)
         
-  restaurant_image:
+      color:
+        type: string
+        format: VARCHAR(45)
+
+  restaurant_favorite:
     properties:
       id:
         type: integer
         uniqueItems: true
-        
-      url:
+
+      user_id:
+        type: integer
+        $ref: '#/definitions/user'
+
+      restaurant_id:
+        type: integer
+        $ref: '#/definitions/restaurant'
+
+  restaurant_report:
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+
+      content:
         type: string
-        format: VARCHAR(255)
-        
+        format: TEXT
+        default: null
+
+      user_id:
+        type: integer
+        $ref: '#/definitions/user'
+
+      restaurant_id:
+        type: integer
+        $ref: '#/definitions/restaurant'
+
+      type_id:
+        type: integer
+        $ref: '#/definitions/report_type'
+
+  restaurant_tag:
+    properties:
+      id:
+        type: integer
+        uniqueItems: true
+
+      tag_id:
+        type: integer
+        $ref: '#/definitions/tag'
+
       restaurant_id:
         type: integer
         $ref: '#/definitions/restaurant'
@@ -657,7 +720,7 @@ definitions:
       review_id:
         type: integer
         $ref: '#/definitions/review'
-
+  
   tag:
     properties:
       id:

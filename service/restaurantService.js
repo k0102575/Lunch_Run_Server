@@ -5,12 +5,18 @@ const async = require('async');
 module.exports = {
     getRestaurantList: function (param, callback) {
         const {page, user_id, category_id, tag_id} = param
-        let where = ''
+        let categoryWhere = ''
+        let tagWhere = ''
         if(category_id != undefined) {
-            where += ' and category_id = ' + category_id
+            categoryWhere += ' and category_id = ' + category_id
         }
         if(tag_id != undefined) {
-            where += ' and t.id = ' + tag_id
+            tagWhere += 'inner join (\
+                select sr.id\
+                from restaurant sr \
+                inner join restaurant_tag rt on sr.id = rt.restaurant_id\
+                where rt.tag_id = '+ tag_id +'\
+            ) as sur on sur.id = r.id'
         }
 
         let row = (page != undefined) ? page : 0
@@ -22,7 +28,8 @@ module.exports = {
                             from restaurant r\
                             left join restaurant_tag rt on r.id = rt.restaurant_id\
                             left join tag t on rt.tag_id = t.id\
-                            where r.delete_datetime is null ' + where + '\
+                            '+tagWhere+'\
+                            where r.delete_datetime is null ' + categoryWhere + '\
                             group by r.id limit ' + (row * 10) + ' ,10' , function(err, rows, fields){
             if(err){
                 callback(500, err.message, null);
@@ -34,13 +41,22 @@ module.exports = {
     },
     getRestaurantPoint: function (param, callback) {
         
-        const {category_id} = param
+        const {category_id, tag_id} = param
         let where = ""
         if(category_id != undefined) {
             where = " and category_id = " + category_id
         }
 
-        connection.query('select id, lat, lng, category_id from restaurant where delete_datetime is null' + where, function(err, rows, fields){
+        if(tag_id != undefined) {
+            where = " and tag_id = " + tag_id
+        }
+
+        connection.query('select r.id, r.lat, r.lng, r.category_id\
+                        from restaurant r\
+                        left join restaurant_tag rt on r.id = rt.restaurant_id\
+                        where delete_datetime is null \
+                        '+where+'\
+                        group by r.id', where, function(err, rows, fields){
             if(err){
                 callback(500, err.message, null);
             } else {
