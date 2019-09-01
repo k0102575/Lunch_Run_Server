@@ -118,19 +118,28 @@ paths:
       tags:
       - restaurant
       parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: false
-        type: object
-        properties:
-          category_id:
+        - in: "header"
+          name: "x-access-token"
+          type: string
+        - in: query
+          name: category_id
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: tag_id
+          required: false
+          schema:
             type: integer
       responses:
         200:
-          description: '[{"id": **,"lat": **,"lng": ***,"category_id": *}]'
+          description: '[{
+            "id": **, 
+            "lat": **, 
+            "lng": ***, 
+            "category_id": *,
+            "color": *
+          }]'
         403:
           description: '{"message" : "Not Token || invalid token"}'
         500:
@@ -164,7 +173,20 @@ paths:
             type: integer
       responses:
         200:
-          description: '[{"id": **, "name": "***", "floor": **, "url": "http://place.map.kakao.com/******", "lat": ***, "lng": ***, "address": "*****", "address_road": "*****", "category_id": *, "rating": "*", "favorite" : "0 || 1", "tag" : "******"}]'
+          description: '[{
+            "id": **, 
+            "name": ***, 
+            "floor": **, 
+            "url": "http://place.map.kakao.com/******", 
+            "lat": ***, 
+            "lng": ***, 
+            "address": "*****", 
+            "address_road": "*****", 
+            "category_id": *, 
+            "rating": *, 
+            "favorite" : "0 || 1", 
+            "tag" : ***
+          }]'
         403:
           description: '{"message" : "Not Token || invalid token"}'
         500:
@@ -328,7 +350,22 @@ paths:
         type: string
       responses:
         200:
-          description: '{"restaurant": {"id": 0,"name": "string","floor": 0,"url": "string","lat": 0,"lng": 0,"address": "string","address_road": "string","category_id": 0,"tags": [0]}}'
+          description: '{
+            "restaurant": {
+              "id": ***,
+              "name": ***,
+              "floor": ***,
+              "url": "http://place.map.kakao.com/******",
+              "lat": ***,
+              "lng": ***,
+              "address": *****,
+              "address_road": *****,
+              "category_id": *,
+              "rating": **,
+              "favorite": 0 || 1,
+              "tag": ***
+              }
+            }'
         403:
           description: '{"message" : "Not Token || invalid token"}'
         422:

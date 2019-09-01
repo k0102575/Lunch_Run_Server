@@ -53,6 +53,7 @@ router.get('/restaurant/:id', function(req, res, next) {
 
     const param = {
         id: req.params.id,
+        user_id : req.user.id
     }
 
     restaurantService.getRestaurant(param, function (status, err, result) {

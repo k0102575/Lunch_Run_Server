@@ -21,7 +21,7 @@ module.exports = {
 
         let row = (page != undefined) ? page : 0
 
-        connection.query('select r.*, \
+        connection.query('select r.id, r.name, r.floor, r.url, r.lat, r.lng, r.address, r.address_road, r.category_id, \
                             ifnull(round((select avg(rating) from review re where re.restaurant_id = r.id ),1), 0) as rating,\
                             ifnull((select count(*) from restaurant_favorite rf where rf.restaurant_id = r.id and rf.user_id = ' + user_id + '), 0) as favorite,\
                             group_concat(t.name) as tag\
@@ -51,12 +51,14 @@ module.exports = {
             where = " and tag_id = " + tag_id
         }
 
-        connection.query('select r.id, r.lat, r.lng, r.category_id\
+        connection.query('select r.id, r.lat, r.lng, r.category_id, rc.color\
                         from restaurant r\
                         left join restaurant_tag rt on r.id = rt.restaurant_id\
+                        inner join restaurant_category rc on r.category_id = rc.id\
                         where delete_datetime is null \
                         '+where+'\
                         group by r.id', where, function(err, rows, fields){
+
             if(err){
                 callback(500, err.message, null);
             } else {
@@ -68,41 +70,22 @@ module.exports = {
     getRestaurant: function (param, callback) {
         
         try {
-            const {id} = param
 
-            var tasks = [
-                function (callback) {
-                    connection.query("select * from restaurant where id = ?", id, function (err, result) {
-                        if(err) {
-                            callback(new Error(err), null);
-                        } else {
-                            callback(null, result);
-                        }
-                    })
-                },
-                function (callback) {
-                    connection.query("select * from restaurant_tag where restaurant_id = ?", id, function (err, result) {
-                        if(err) {
-                            callback(new Error(err), null);
-                        } else {
-                            callback(null, result);
-                        }
-                    })
-                }
-            ];
-            
-            async.series(tasks, function (err, results) {
-                if(err) {
-                    callback(500, err.message, null)
+            const {id, user_id} = param
+            connection.query('select r.id, r.name, r.floor, r.url, r.lat, r.lng, r.address, r.address_road, r.category_id, \
+                            ifnull(round((select avg(rating) from review re where re.restaurant_id = r.id ),1), 0) as rating,\
+                            ifnull((select count(*) from restaurant_favorite rf where rf.restaurant_id = r.id and rf.user_id = ? ), 0) as favorite,\
+                            group_concat(t.name) as tag\
+                            from restaurant r\
+                            left join restaurant_tag rt on r.id = rt.restaurant_id\
+                            left join tag t on rt.tag_id = t.id\
+                            where r.id = ?', [user_id, id], function(err, rows, fields){
+
+                if(err){
+                    callback(500, err.message, null);
                 } else {
-                    let restaurant = JSON.parse(JSON.stringify(results[0][0]));
-                    let restaurantTag = JSON.parse(JSON.stringify(results[1]));
-    
-                    restaurant.tags = restaurantTag
-
-                    callback(null, null, restaurant)
+                    callback(null, null, rows[0]);
                 }
-
             });
 
         } catch(err) {
