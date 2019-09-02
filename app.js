@@ -18,7 +18,7 @@ const restaurantFavoriteRouter = require('./routes/restaurantFavorite');
 const reviewRouter = require('./routes/review');
 const tagRouter = require('./routes/tag');
 const reportTypeRouter = require('./routes/reportType');
-const restaurantReportRouter = require('./routes/reportType');
+const restaurantReportRouter = require('./routes/restaurantReport');
 
 const app = express();
 
