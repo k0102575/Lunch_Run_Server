@@ -6,37 +6,119 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Document</title>
 <style>
-html, body, button{
-	font-family:Arial, "돋움", Dotum, "굴림", Gulim, "Apple SD Gothic Neo", AppleGothic, sans-serif;
-}
+	html,
+	body,
+	button {
+		font-family: Arial, "돋움", Dotum, "굴림", Gulim, "Apple SD Gothic Neo", AppleGothic, sans-serif;
+	}
 
-body {
-    margin:0px;
-    min-height: 100vh;
-}
+	body {
+		margin: 0px;
+		min-height: 100vh;
+	}
 
-button{border:0;margin:0;padding:0;}
+	button {
+		border: 0;
+		margin: 0;
+		padding: 0;
+	}
 
-.title{margin-top:50px;text-align:center;}
+	.title {
+		margin-top: 50px;
+		text-align: center;
+	}
 
-.box-roulette{position:absolute;left:2.5vw;top:25%;width:90vw;height:90vw;border:10px solid #ccc;border-radius:50%;background:#ccc;overflow:hidden;}
-.box-roulette .markers{position:absolute;left:50%;top:0;margin-left:-25px;width:0;height:0;border:25px solid #fff;border-left-color:transparent;border-right-color:transparent;border-bottom-color:transparent;z-index:9999;}
-.box-roulette .roulette{position:relative;width:100%;height:100%;overflow:hidden;}
-.box-roulette .item{position:absolute;top:0;width:0;height:0;border:0 solid transparent;transform-origin:0 100%;}
-.box-roulette .label{position:absolute;left:0;top:0;color:#fff;white-space:nowrap;transform-origin:0 0;}
-.box-roulette .label .text{display:inline-block;font-size:20px;font-weight:bold;line-height:1;vertical-align:middle;}
+	.box-roulette {
+		position: absolute;
+		left: 2.5vw;
+		top: 25%;
+		width: 90vw;
+		height: 90vw;
+		border: 10px solid #ccc;
+		border-radius: 50%;
+		background: #ccc;
+		overflow: hidden;
+	}
 
-#btn-start{display:block;position:absolute;left:50%;top:50%;margin:-50px 0 0 -50px;width:100px;height:100px;font-weight:bold;background:#fff;border-radius:50px;z-index:9999;cursor:pointer;}
+	.box-roulette .markers {
+		position: absolute;
+		left: 50%;
+		top: 0;
+		margin-left: -18.25px;
+		width: 0;
+		height: 0;
+		border: 18.25px solid #FFE043;
+		border-left-color: transparent;
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+		z-index: 9999;
+	}
 
+	.box-roulette .roulette {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
 
+	.box-roulette .item {
+		position: absolute;
+		top: 0;
+		width: 0;
+		height: 0;
+		border: 0 solid transparent;
+		transform-origin: 0 100%;
+	}
+
+	.box-roulette .label {
+		position: absolute;
+		left: 0;
+		top: 0;
+		color: #FFE043;
+		white-space: nowrap;
+		transform-origin: 0 0;
+	}
+
+	.box-roulette .label .text {
+		display: inline-block;
+		font-size: 12px;
+		font-weight: bold;
+		line-height: 1;
+		vertical-align: middle;
+	}
+
+	#btn-start {
+		display: block;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin: -50px 0 0 -50px;
+		width: 100px;
+		height: 100px;
+		font-weight: bold;
+		background: #fff;
+		border-radius: 50px;
+		z-index: 9999;
+		cursor: pointer;
+	}
+
+	*{
+		-webkit-tap-highlight-color: rgba(0,0,0,0);
+	}
+
+	*:active,
+	*:focus {
+	outline: none !important;
+	}
 </style>
 </head>
+
 <body>
 
 <div class="box-roulette">
 	<div class="markers"></div>
 	<button type="button" id="btn-start">
-	  룰렛<br>돌리기
+		룰렛<br>돌리기
 	</button>
 	<div class="roulette" id="roulette"></div>
 	<div class="currentB" id="currentB"></div>
@@ -45,149 +127,27 @@ button{border:0;margin:0;padding:0;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://cdn.sobekrepository.org/includes/jquery-rotate/2.2/jquery-rotate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+<script src="/js/roulette.js"></script>
 <script>
 
-var data;
-(function($) {
-  $.fn.extend({
 
-    roulette: function(options) {
+$(function () {
 
-      var defaults = {
-        angle: 0,
-        angleOffset: -45,
-        speed: 5000,
-        easing: "easeInOutElastic",
-      };
-
-      var opt = $.extend(defaults, options);
-
-      return this.each(function() {
-        var o = opt;
-				
-        data = [
-					{
-            color: '#3f297e',
-            text: '1'
-          },
-          {
-            color: '#1d61ac',
-            text: '2'
-          },
-          {
-            color: '#169ed8',
-            text: '3'
-          },
-          {
-            color: '#209b6c',
-            text: '4'
-          },
-          {
-            color: '#60b236',
-            text: '5'
-          },
-          {
-            color: '#efe61f',
-            text: '6'
-          },
-          {
-            color: '#f7a416',
-            text: '7'
-          },
-          {
-            color: '#e6471d',
-            text: '8'
-          }
-        ];
-
-        var $wrap = $(this);
-        var $btnStart = $wrap.find("#btn-start");
-        var $roulette = $wrap.find(".roulette");
-        var wrapW = $wrap.width();
-        var angle = o.angle;
-        var angleOffset = o.angleOffset;
-        var speed = o.speed;
-        var esing = o.easing;
-        var itemSize = data.length;
-        var itemSelector = "item";
-        var labelSelector = "label";
-        var d = 360 / itemSize;
-        var borderTopWidth = wrapW;
-        var borderRightWidth = tanDeg(d);
-
-        for (i = 1; i <= itemSize; i += 1) {
-          var idx = i - 1;
-          var rt = i * d + angleOffset;
-          var itemHTML = $('<div class="' + itemSelector + '">');
-          var labelHTML = '';
-              labelHTML += '<p class="' + labelSelector + '">';
-              labelHTML += '	<span class="text">' + data[idx].text + '<\/span>';
-              labelHTML += '<\/p>';
-
-          $roulette.append(itemHTML);
-          $roulette.children("." + itemSelector).eq(idx).append(labelHTML);
-          $roulette.children("." + itemSelector).eq(idx).css({
-            "left": wrapW / 2,
-            "top": -wrapW / 2,
-            "border-top-width": borderTopWidth,
-            "border-right-width": borderRightWidth,
-            "border-top-color": data[idx].color,
-            "transform": "rotate(" + rt + "deg)"
-          });
-
-          var textH = parseInt(((3 * Math.PI * wrapW) / d) * .8);
-
-          $roulette.children("." + itemSelector).eq(idx).children("." + labelSelector).css({
-            "height": textH + 'px',
-            "line-height": textH + 'px',
-            "transform": 'translateX(' + (textH * 1.3) + 'px) translateY(' + (wrapW * -.3) + 'px) rotateZ(' + (90 + d * .5) + 'deg)'
-          });
-
-        }
-
-        function tanDeg(deg) {
-          var rad = deg * Math.PI / 180;
-          return wrapW / (1 / Math.tan(rad));
-        }
-
-
-        $btnStart.on("click", function() {
-          rotation();
-        });
-
-        function rotation() {
-
-          var completeA = 360 * r(5, 10) + r(0, 360);
-
-          $roulette.rotate({
-            angle: angle,
-            animateTo: completeA,
-            center: ["50%", "50%"],
-            easing: $.easing.esing,
-            callback: function() {
-              var currentA = $(this).getRotateAngle();
-							var currentB = (8-Math.floor(currentA[0]%360/45));
-							
-							console.log(currentB);
-            },
-            duration: speed
-          });
-        }
-        function r(min, max) {
-          return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-      });
-    }
-  });
-})(jQuery);
-
-$(function() {
-
-  $('.box-roulette').roulette();
+	$.ajax({
+		url:'/roulette/data',
+		type: "GET",
+		dataType: 'json',
+		success:function(data){
+			$('.box-roulette').roulette(data);
+		},
+		error:function (err) {
+			console.log(err)
+		}
+	})
 
 });
 
 </script>
 </body>
+
 </html>
