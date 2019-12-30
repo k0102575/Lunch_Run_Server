@@ -1,4 +1,6 @@
-var swaggerDefinition = {
+import swaggerJSDoc from 'swagger-jsdoc';
+
+const swaggerDefinition = {
   info: {
     title: 'Lunch_run',
     version: '1.0.0',
@@ -9,9 +11,11 @@ var swaggerDefinition = {
   basePath: '/'
 }
 
-var options = {
+const options = {
   swaggerDefinition: swaggerDefinition,
   apis: ['./src/util/swagger/doc.yaml'],
 }
 
-export default options;
+const swaggerSpec = swaggerJSDoc(options);
+
+export default swaggerSpec;
