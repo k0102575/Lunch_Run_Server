@@ -109,72 +109,7 @@ $(document).ready(function () {
 
     marker.setMap(map);
 
-//   $.ajax({
-//     type : 'get',
-//     url : '/restaurant_point',
-//     dataType : 'json',
-//     beforeSend : function(xhr){
-//         xhr.setRequestHeader("x-access-token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiYWxpYXMiOiLthYzsmKQiLCJpYXQiOjE1NjYzNTg4NDIsImV4cCI6MTU2NzU2ODQ0MiwiaXNzIjoidGhlby5raW1AdHJpcGxsbGV0LmNvbSIsInN1YiI6InVzZXJJbmZvIn0.irPcb8_iy4YmX1QdpUUcGnbNAStM8PkXxkOf-eX4bQg");
-//     },
-//     success : function(response){
-//         customOverlayArray = $(response).map(function(i, data) {
-//             return new kakao.maps.CustomOverlay({
-//                 position: new kakao.maps.LatLng(data.lat, data.lng),
-//                 content: categoryColor(data.category_id)   
-//             });
-//         });
-
-//         for (var i = 0; i < customOverlayArray.length; i++) {
-//             customOverlayArray[i].setMap(map);
-//         }
-
-//     },
-//     error: function(xhr, status, error){
-//         console.log(xhr)
-//         console.log(status)
-//         console.log(err)
-//     }
-//   });
-
 })
-
-const categoryColor = (category)=> {
-    switch (category) {
-        case 1:
-            return '<div class ="label b-blue"></div>'
-        break;
-        case 2:
-            return '<div class ="label b-red"></div>'
-        break;
-        case 3:
-            return '<div class ="label b-white"></div>'
-        break;
-        case 4:
-            return '<div class ="label b-black"></div>'
-        break;
-        case 5:
-            return '<div class ="label b-pink"></div>'
-        break;
-        case 6:
-            return '<div class ="label b-yellow"></div>'
-        break;
-        case 7:
-            return '<div class ="label b-brown"></div>'
-        break;
-        case 8:
-            return '<div class ="label b-purple"></div>'
-        break;
-        case 9:
-            return '<div class ="label b-green"></div>'
-        break;
-        case 10:
-            return '<div class ="label b-orange"></div>'
-        break;
-            
-    }
-}
-
-
 
 </script>
 </body>
