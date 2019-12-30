@@ -11,7 +11,7 @@ var swaggerDefinition = {
 
 var options = {
   swaggerDefinition: swaggerDefinition,
-  apis: ['./util/swagger/doc.yaml'],
+  apis: ['./src/util/swagger/doc.yaml'],
 }
 
-module.exports = options
+export default options;
