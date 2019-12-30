@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const kakao = require("../util/kakao.js");
+const kakao = require("../config/kakao.js");
 const rouletteService = require("../service/rouletteService.js");
 
 router.get('/', function(req, res, next) {

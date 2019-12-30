@@ -109,32 +109,32 @@ $(document).ready(function () {
 
     marker.setMap(map);
 
-  $.ajax({
-    type : 'get',
-    url : '/restaurant_point',
-    dataType : 'json',
-    beforeSend : function(xhr){
-        xhr.setRequestHeader("x-access-token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiYWxpYXMiOiLthYzsmKQiLCJpYXQiOjE1NjYzNTg4NDIsImV4cCI6MTU2NzU2ODQ0MiwiaXNzIjoidGhlby5raW1AdHJpcGxsbGV0LmNvbSIsInN1YiI6InVzZXJJbmZvIn0.irPcb8_iy4YmX1QdpUUcGnbNAStM8PkXxkOf-eX4bQg");
-    },
-    success : function(response){
-        customOverlayArray = $(response).map(function(i, data) {
-            return new kakao.maps.CustomOverlay({
-                position: new kakao.maps.LatLng(data.lat, data.lng),
-                content: categoryColor(data.category_id)   
-            });
-        });
+//   $.ajax({
+//     type : 'get',
+//     url : '/restaurant_point',
+//     dataType : 'json',
+//     beforeSend : function(xhr){
+//         xhr.setRequestHeader("x-access-token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiYWxpYXMiOiLthYzsmKQiLCJpYXQiOjE1NjYzNTg4NDIsImV4cCI6MTU2NzU2ODQ0MiwiaXNzIjoidGhlby5raW1AdHJpcGxsbGV0LmNvbSIsInN1YiI6InVzZXJJbmZvIn0.irPcb8_iy4YmX1QdpUUcGnbNAStM8PkXxkOf-eX4bQg");
+//     },
+//     success : function(response){
+//         customOverlayArray = $(response).map(function(i, data) {
+//             return new kakao.maps.CustomOverlay({
+//                 position: new kakao.maps.LatLng(data.lat, data.lng),
+//                 content: categoryColor(data.category_id)   
+//             });
+//         });
 
-        for (var i = 0; i < customOverlayArray.length; i++) {
-            customOverlayArray[i].setMap(map);
-        }
+//         for (var i = 0; i < customOverlayArray.length; i++) {
+//             customOverlayArray[i].setMap(map);
+//         }
 
-    },
-    error: function(xhr, status, error){
-        console.log(xhr)
-        console.log(status)
-        console.log(err)
-    }
-  });
+//     },
+//     error: function(xhr, status, error){
+//         console.log(xhr)
+//         console.log(status)
+//         console.log(err)
+//     }
+//   });
 
 })
 

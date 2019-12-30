@@ -12,18 +12,12 @@
 
 ## 기술스택
 
-- Node.js, Express.js, Docker
+- Node.js, Express.js, Docker, Nginx
 
-- MySql, Jwt, KaKao Map Api
+- MySql, Jwt
 
 - AWS EC2, AWS S3, RDS
 
 - Swagger, Trello, Zeplin
 
 - Github
-
-## 개발 기간
-
-- 2019.07.24 ~ 2019.09.04 (1차 개발 완료)
-
-- 2차 개발전 Front End Framework - Vue.JS 스터디중

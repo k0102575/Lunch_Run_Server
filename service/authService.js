@@ -2,7 +2,7 @@ const datasource = require('../util/datasource');
 const connection = datasource.getConnection();
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const jwtObj = require("../util/jwt");
+const jwtObj = require("./config/jwt");
 const secret = jwtObj.secret
 
 module.exports = {
