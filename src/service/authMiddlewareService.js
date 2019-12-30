@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const jwtObj = require("../config/jwt");
+const jwtObj = require("../../config/jwt");
 const secret = jwtObj.secret;
 
 const authMiddleware = (req, res, next) => {

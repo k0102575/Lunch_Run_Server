@@ -1,10 +1,13 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+
+const RestaurantFavoriteRouter = express.Router();
 const restaurantFavoriteService = require('../service/restaurantFavoriteService.js');
 const authMiddleware = require('../service/authMiddlewareService.js');
 
-router.use('/restaurant_favorite', authMiddleware)
-router.get('/restaurant_favorite', function(req, res, next) {
+RestaurantFavoriteRouter.use('/', authMiddleware)
+RestaurantFavoriteRouter.use('/:id', authMiddleware)
+
+RestaurantFavoriteRouter.get('/', function(req, res, next) {
     
     const param = {
         page : req.query.page,
@@ -22,8 +25,7 @@ router.get('/restaurant_favorite', function(req, res, next) {
 
 });
 
-router.use('/restaurant_favorite/:id', authMiddleware)
-router.post('/restaurant_favorite/:id', function(req, res, next) {
+RestaurantFavoriteRouter.post('/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
         return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
@@ -45,8 +47,7 @@ router.post('/restaurant_favorite/:id', function(req, res, next) {
     })
 });
 
-router.use('/restaurant_favorite/:id', authMiddleware)
-router.delete('/restaurant_favorite/:id', function(req, res, next) {
+RestaurantFavoriteRouter.delete('/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
         return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
@@ -68,4 +69,4 @@ router.delete('/restaurant_favorite/:id', function(req, res, next) {
     })
 });
 
-module.exports = router;
+export default RestaurantFavoriteRouter;

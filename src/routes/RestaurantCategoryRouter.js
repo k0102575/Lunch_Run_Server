@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+
+const RestaurantCategoryRouter = express.Router();
 const restaurantCategoryService = require('../service/restaurantCategoryService.js');
 
-router.get('/restaurantCategory', function(req, res, next) {
+RestaurantCategoryRouter.get('/', function(req, res, next) {
 
     restaurantCategoryService.getCategory(function (err, result) {
         if(!err) {
@@ -13,4 +14,4 @@ router.get('/restaurantCategory', function(req, res, next) {
     })
 });
 
-module.exports = router;
+export default RestaurantCategoryRouter;

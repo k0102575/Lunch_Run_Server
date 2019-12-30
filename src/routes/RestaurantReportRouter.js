@@ -1,11 +1,14 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+
+const RestaurantReportRouter = express.Router();
 const restaurantReportService = require('../service/restaurantReportService.js');
 const authMiddleware = require('../service/authMiddlewareService.js');
 const { check, validationResult } = require('express-validator');
 
-router.use('/restaurant_report', authMiddleware)
-router.get('/restaurant_report', function(req, res, next) {
+RestaurantReportRouter.use('/', authMiddleware)
+RestaurantReportRouter.use('/:id', authMiddleware)
+
+RestaurantReportRouter.get('/', function(req, res, next) {
     
     const param = {
         page : req.query.page,
@@ -23,8 +26,7 @@ router.get('/restaurant_report', function(req, res, next) {
 
 });
 
-router.use('/restaurant_report/:id', authMiddleware)
-router.get('/restaurant_report/:id', function(req, res, next) {
+RestaurantReportRouter.get('/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
         return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
@@ -45,8 +47,7 @@ router.get('/restaurant_report/:id', function(req, res, next) {
     })
 });
 
-router.use('/restaurant_report', authMiddleware)
-router.post('/restaurant_report', [
+RestaurantReportRouter.post('/', [
     check('restaurant_id').not().isEmpty(),
     check('type_id').not().isEmpty()
   ], (req, res, next) => {
@@ -74,8 +75,7 @@ router.post('/restaurant_report', [
     })
 });
 
-router.use('/restaurant_report', authMiddleware)
-router.put('/restaurant_report', [
+RestaurantReportRouter.put('/', [
     check('type_id').not().isEmpty(),
     check('id').not().isEmpty()
   ], function(req, res, next) {
@@ -102,8 +102,7 @@ router.put('/restaurant_report', [
     })
 });
 
-router.use('/restaurant_report/:id', authMiddleware)
-router.delete('/restaurant_report/:id', function(req, res, next) {
+RestaurantReportRouter.delete('/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
         return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
@@ -124,7 +123,4 @@ router.delete('/restaurant_report/:id', function(req, res, next) {
     })
 });
 
-
-
-
-module.exports = router;
+export default RestaurantReportRouter;

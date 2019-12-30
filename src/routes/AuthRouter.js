@@ -1,9 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const authService = require("../service/authService.js");
-const { check, validationResult } = require('express-validator');
+import express from 'express';
+import authService from '../service/authService'
+import { check, validationResult } from 'express-validator';
 
-router.post('/signup', [
+const AuthRouter = express.Router();
+
+AuthRouter.post('/signup', [
     check('email').isEmail(),
     check('password').not().isEmpty(),
     check('alias').not().isEmpty(),
@@ -35,7 +36,7 @@ router.post('/signup', [
 
 });
 
-router.post('/login', [
+AuthRouter.post('/login', [
     check('email').isEmail(),
     check('password').not().isEmpty()
   ], function(req, res, next) {
@@ -62,7 +63,7 @@ router.post('/login', [
 });
 
 
-router.post('/check', function(req, res, next) {
+AuthRouter.post('/check', function(req, res, next) {
 
     const token = req.headers['x-access-token'] || req.query.token
 
@@ -84,4 +85,4 @@ router.post('/check', function(req, res, next) {
     })
 });
 
-module.exports = router;
+export default AuthRouter;

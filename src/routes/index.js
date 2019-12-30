@@ -1,31 +1,18 @@
-const express = require('express');
-const router = express.Router();
-const kakao = require("../config/kakao.js");
-const rouletteService = require("../service/rouletteService.js");
+const addRouter = (router) => {
+    return require(`./${router}`).default;
+};
 
-router.get('/', function(req, res, next) {
-    res.render('index', {kakao: kakao});
-});
+module.exports = {
+    "auth": addRouter('AuthRouter'),
+    "report/type": addRouter('ReportTypeRouter'),
+    "restaurant/category": addRouter('RestaurantCategoryRouter'),
+    "restaurant/favorite": addRouter('RestaurantFavoriteRouter'),
+    "restaurant/point": addRouter('RestaurantPointRouter'),
+    "restaurant/report": addRouter('RestaurantReportRouter'),
+    "restaurant": addRouter('RestaurantRouter'),
+    "review": addRouter('ReviewRouter'),
+    "tag": addRouter('TagRouter'),
+    "user": addRouter('UserRouter'),
+    "/": addRouter('ViewRouter'),
+};
 
-router.get('/roulette', function(req, res, next) {
-    res.render('roulette');
-});
-
-router.get('/roulette/data', (req, res, next) => {
-
-    rouletteService.getData((err, result) =>{
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json(result)
-        }    
-    })
-
-});
-
-router.get('/test', function(req, res, next) {
-    res.status(200).json({"token" : "블라"})
-});
-
-module.exports = router;

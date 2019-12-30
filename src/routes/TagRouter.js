@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+
+const TagRouter = express.Router();
 const tagService = require('../service/tagService.js');
 
-router.get('/tag', function(req, res, next) {
+TagRouter.get('/', function(req, res, next) {
 
     tagService.getCategory(function (err, result) {
         if(!err) {
@@ -13,4 +14,4 @@ router.get('/tag', function(req, res, next) {
     })
 });
 
-module.exports = router;
+export default TagRouter;

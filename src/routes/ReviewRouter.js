@@ -1,11 +1,14 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+
+const ReviewRouter = express.Router();
 const reviewService = require('../service/reviewService.js');
 const authMiddleware = require('../service/authMiddlewareService.js');
 const { check, validationResult } = require('express-validator');
 
-router.use('/review', authMiddleware)
-router.get('/review', [
+ReviewRouter.use('/', authMiddleware)
+ReviewRouter.use('/:id', authMiddleware)
+
+ReviewRouter.get('/', [
     check('restaurant_id').not().isEmpty()
   ], function(req, res, next) {
 
@@ -30,8 +33,7 @@ router.get('/review', [
 
 });
 
-router.use('/review', authMiddleware)
-router.post('/review', [
+ReviewRouter.post('/', [
     check('rating').not().isEmpty(),
     check('restaurant_id').not().isEmpty()
   ], function(req, res, next) {
@@ -59,8 +61,7 @@ router.post('/review', [
     })
 });
 
-router.use('/review', authMiddleware)
-router.put('/review', [
+ReviewRouter.put('/', [
     check('rating').not().isEmpty(),
     check('id').not().isEmpty()
   ], function(req, res, next) {
@@ -88,8 +89,7 @@ router.put('/review', [
     })
 });
 
-router.use('/review', authMiddleware)
-router.delete('/review/:id', function(req, res, next) {
+ReviewRouter.delete('/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
         return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
@@ -110,4 +110,4 @@ router.delete('/review/:id', function(req, res, next) {
     })
 });
 
-module.exports = router;
+export default ReviewRouter;

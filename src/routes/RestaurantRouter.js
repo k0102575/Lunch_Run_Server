@@ -1,30 +1,33 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+import { check, validationResult } from 'express-validator';
+
+const RestaurantRouter = express.Router();
 const restaurantService = require('../service/restaurantService.js');
 const authMiddleware = require('../service/authMiddlewareService.js');
-const { check, validationResult } = require('express-validator');
 
-router.use('/restaurant_point', authMiddleware)
-router.get('/restaurant_point', function(req, res, next) {
+// router.use('/restaurant_point', authMiddleware)
+// router.get('/restaurant_point', function(req, res, next) {
     
-    const param = {
-        category_id : req.query.category_id,
-        tag_id : req.query.tag_id
-    }
+//     const param = {
+//         category_id : req.query.category_id,
+//         tag_id : req.query.tag_id
+//     }
 
-    restaurantService.getRestaurantPoint(param, (status, err, result) => {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json(result)
-        }
-    })
+//     restaurantService.getRestaurantPoint(param, (status, err, result) => {
+//         if(err) {
+//             if(status == 500) console.log(err);
+//             res.status(status).json({message : err})
+//         } else {
+//             res.status(200).json(result)
+//         }
+//     })
 
-});
+// });
 
-router.use('/restaurant', authMiddleware)
-router.get('/restaurant', function(req, res, next) {
+RestaurantRouter.use('/', authMiddleware)
+RestaurantRouter.use('/:id', authMiddleware)
+
+RestaurantRouter.get('/', function(req, res, next) {
     
     const param = {
         page : req.query.page,
@@ -44,8 +47,7 @@ router.get('/restaurant', function(req, res, next) {
 
 });
 
-router.use('/restaurant/:id', authMiddleware)
-router.get('/restaurant/:id', function(req, res, next) {
+RestaurantRouter.get('/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
         return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
@@ -67,8 +69,7 @@ router.get('/restaurant/:id', function(req, res, next) {
     })
 });
 
-router.use('/restaurant', authMiddleware)
-router.post('/restaurant', [
+RestaurantRouter.post('/', [
     check('name').not().isEmpty(),
     check('floor').isInt(),
     check('lat').isFloat(),
@@ -104,8 +105,7 @@ router.post('/restaurant', [
     })
 });
 
-router.use('/restaurant', authMiddleware)
-router.put('/restaurant', [
+RestaurantRouter.put('/', [
     check('name').not().isEmpty(),
     check('floor').isInt(),
     check('lat').isFloat(),
@@ -143,8 +143,7 @@ router.put('/restaurant', [
     })
 });
 
-router.use('/restaurant/:id', authMiddleware)
-router.delete('/restaurant/:id', function(req, res, next) {
+RestaurantRouter.delete('/:id', function(req, res, next) {
 
     if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
         return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
@@ -165,7 +164,4 @@ router.delete('/restaurant/:id', function(req, res, next) {
     })
 });
 
-
-
-
-module.exports = router;
+export default RestaurantRouter;

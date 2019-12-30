@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+const UserRouter = express.Router();
 const userService = require('../service/userService.js');
 
-router.get('/user', function(req, res, next) {
+UserRouter.get('/', function(req, res, next) {
     userService.getUser(function (err, result) {
         if(!err) {
             res.status(200).json(result);
@@ -12,4 +12,4 @@ router.get('/user', function(req, res, next) {
     });
 });
 
-module.exports = router;
+export default UserRouter;
