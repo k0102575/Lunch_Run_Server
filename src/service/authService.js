@@ -2,8 +2,7 @@ const datasource = require('../util/datasource');
 const connection = datasource.getConnection();
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const jwtObj = require("../../config/jwt");
-const secret = jwtObj.secret
+const jwtOption = require("../../config/jwt");
 
 module.exports = {
     signup : function (param, callback) {
@@ -73,7 +72,7 @@ module.exports = {
                             id: user.id,
                             alias: user.alias
                         }, 
-                        secret, 
+                        jwtOption.secretKey, 
                         {
                             expiresIn: '14d',
                             issuer: user.email,
@@ -113,7 +112,7 @@ module.exports = {
     
             const p = new Promise(
                 (resolve, reject) => {
-                    jwt.verify(token, secret, (e, decoded) => {
+                    jwt.verify(token, jwtOption.secretKey, (e, decoded) => {
                         if(e) reject(e)
                         resolve(decoded)
                     })

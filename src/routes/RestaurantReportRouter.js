@@ -2,11 +2,14 @@ import express from 'express';
 
 const RestaurantReportRouter = express.Router();
 const restaurantReportService = require('../service/restaurantReportService.js');
-const authMiddleware = require('../service/authMiddlewareService.js');
 const { check, validationResult } = require('express-validator');
 
-RestaurantReportRouter.use('/', authMiddleware)
-RestaurantReportRouter.use('/:id', authMiddleware)
+import {
+    authMiddlewareService
+} from '../service';
+
+RestaurantReportRouter.use('/', authMiddlewareService.isValidToken)
+RestaurantReportRouter.use('/:id', authMiddlewareService.isValidToken)
 
 RestaurantReportRouter.get('/', function(req, res, next) {
     

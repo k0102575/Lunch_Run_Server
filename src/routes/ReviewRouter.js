@@ -2,11 +2,14 @@ import express from 'express';
 
 const ReviewRouter = express.Router();
 const reviewService = require('../service/reviewService.js');
-const authMiddleware = require('../service/authMiddlewareService.js');
 const { check, validationResult } = require('express-validator');
 
-ReviewRouter.use('/', authMiddleware)
-ReviewRouter.use('/:id', authMiddleware)
+import {
+    authMiddlewareService
+} from '../service';
+
+ReviewRouter.use('/', authMiddlewareService.isValidToken)
+ReviewRouter.use('/:id', authMiddlewareService.isValidToken)
 
 ReviewRouter.get('/', [
     check('restaurant_id').not().isEmpty()

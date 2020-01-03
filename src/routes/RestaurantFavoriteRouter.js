@@ -2,10 +2,13 @@ import express from 'express';
 
 const RestaurantFavoriteRouter = express.Router();
 const restaurantFavoriteService = require('../service/restaurantFavoriteService.js');
-const authMiddleware = require('../service/authMiddlewareService.js');
 
-RestaurantFavoriteRouter.use('/', authMiddleware)
-RestaurantFavoriteRouter.use('/:id', authMiddleware)
+import {
+    authMiddlewareService
+} from '../service';
+
+RestaurantFavoriteRouter.use('/', authMiddlewareService.isValidToken)
+RestaurantFavoriteRouter.use('/:id', authMiddlewareService.isValidToken)
 
 RestaurantFavoriteRouter.get('/', function(req, res, next) {
     

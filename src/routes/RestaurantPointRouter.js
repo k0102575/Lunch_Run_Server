@@ -2,9 +2,13 @@ import express from 'express';
 
 const RestaurantPointRouter = express.Router();
 const restaurantService = require('../service/restaurantService.js');
-const authMiddleware = require('../service/authMiddlewareService.js');
 
-RestaurantPointRouter.use('/', authMiddleware)
+import {
+    authMiddlewareService
+} from '../service';
+
+RestaurantPointRouter.use('/', authMiddlewareService.isValidToken)
+
 RestaurantPointRouter.get('/', function(req, res, next) {
     
     const param = {
