@@ -12,7 +12,6 @@ module.exports = {
     "restaurant": addRouter('RestaurantRouter'),
     "review": addRouter('ReviewRouter'),
     "tag": addRouter('TagRouter'),
-    "user": addRouter('UserRouter'),
     "/": addRouter('ViewRouter'),
 };
 

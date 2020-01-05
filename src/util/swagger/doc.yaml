@@ -93,11 +93,11 @@ paths:
         500:
           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
 
-  /restaurantCategory:
+  /restaurant/category:
     get:
       summary: 식당 카테고리 정보 리스트
       tags:
-      - restaurant_category
+      - restaurant/category
       responses:
         200:
           description: "카테고리 리스트"
@@ -108,11 +108,11 @@ paths:
         500:
           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
 
-  /restaurant_point:
+  /restaurant/point:
     get:
       summary: 식당 지도 포인트 정보
       tags:
-      - restaurant
+      - restaurant/point
       parameters:
         - in: "header"
           name: "x-access-token"
@@ -409,11 +409,11 @@ paths:
       security:
         - api_key: []
 
-  /restaurant_favorite:
+  /restaurant/favorite:
     get:
       summary: 내가 좋아하는 식당 리스트
       tags:
-      - restaurant_favorite
+      - restaurant/favorite
       parameters:
         - in: "header"
           name: "x-access-token"
@@ -446,11 +446,11 @@ paths:
       security:
         - api_key: []
 
-  /restaurant_favorite/{id}:
+  /restaurant/favorite/{id}:
     post:
       summary: 내가 좋아하는 식당 추가
       tags:
-      - restaurant_favorite
+      - restaurant/favorite
       parameters:
       - in: "header"
         name: "x-access-token"
@@ -479,7 +479,7 @@ paths:
     delete:
       summary: 내가 좋아하는 식당 삭제
       tags:
-      - restaurant_favorite
+      - restaurant/favorite
       parameters:
       - in: "header"
         name: "x-access-token"
@@ -505,11 +505,11 @@ paths:
       security:
         - api_key: []
 
-  /restaurant_report:
+  /restaurant/report:
     get:
       summary: 내가 신고한 식당 리스트
       tags:
-      - restaurant_report
+      - restaurant/report
       parameters:
         - in: "header"
           name: "x-access-token"
@@ -538,7 +538,7 @@ paths:
     post:
       summary: 식당 신고 등록
       tags:
-      - restaurant_report
+      - restaurant/report
       parameters:
       - in: "header"
         name: "x-access-token"
@@ -584,7 +584,7 @@ paths:
     put:
       summary: 식당 신고 수정
       tags:
-      - restaurant_report
+      - restaurantreport
       parameters:
       - in: "header"
         name: "x-access-token"
@@ -627,11 +627,11 @@ paths:
       security:
         - api_key: []
         
-  /restaurant_report/{id}:
+  /restaurant/report/{id}:
     get:
       summary: 식당 신고 정보 가져오기
       tags:
-      - restaurant_report
+      - restaurant/report
       parameters:
       - in: "header"
         name: "x-access-token"
@@ -667,7 +667,7 @@ paths:
     delete:
       summary: 신고 삭제
       tags:
-      - restaurant_report
+      - restaurant/report
       parameters:
       - in: "header"
         name: "x-access-token"
@@ -845,11 +845,11 @@ paths:
         500:
           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
   
-  /report_type:
+  /report/type:
     get:
       summary: 허위 신고 타입 리스트
       tags:
-      - report_type
+      - report/type
       responses:
         200:
           description: "허위 신고 타입 리스트"

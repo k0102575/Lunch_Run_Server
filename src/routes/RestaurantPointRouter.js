@@ -12,6 +12,8 @@ import {
 // RestaurantPointRouter.use('/', authMiddlewareService.isValidToken)
 RestaurantPointRouter.get('/', async (req, res) => {
     
+    // TODO 전체 리스트 에서 변경 필요 설정값 혹은 지도 표시 포인트만
+
     try {
         const param = {
             category_id : req.query.category_id,
