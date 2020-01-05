@@ -1,29 +1,29 @@
 import express from 'express';
 
 const RestaurantPointRouter = express.Router();
-const restaurantService = require('../service/restaurantService.js');
 
 import {
-    authMiddlewareService
+    authMiddlewareService,
+    errorService,
+    serverService,
+    restaurantPointService
 } from '../service';
 
-RestaurantPointRouter.use('/', authMiddlewareService.isValidToken)
-
-RestaurantPointRouter.get('/', function(req, res, next) {
+// RestaurantPointRouter.use('/', authMiddlewareService.isValidToken)
+RestaurantPointRouter.get('/', async (req, res) => {
     
-    const param = {
-        category_id : req.query.category_id,
-        tag_id : req.query.tag_id
-    }
-
-    restaurantService.getRestaurantPoint(param, (status, err, result) => {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json(result)
+    try {
+        const param = {
+            category_id : req.query.category_id,
+            tag_id : req.query.tag_id
         }
-    })
+    
+        const result = await restaurantPointService.getRestaurantPoint(param)
+
+        serverService.response(res, 200, result)
+    } catch(err) {
+        errorService.resError(res, 500, err)
+    }
 
 });
 

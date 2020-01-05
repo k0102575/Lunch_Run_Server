@@ -30,27 +30,6 @@ RestaurantRouter.get('/', async (req, res) => {
     }
 });
 
-RestaurantRouter.get('/:id', async (req, res) => {
-
-    try {
-
-        if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
-            return errorService.resError(res, 422, { "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] })
-        }
-
-        const param = {
-            id: req.params.id,
-            user_id : req.user.id
-        }
-
-        const [result] =  await restaurantService.getRestaurant(param);
-        serverService.response(res, 200, {"restaurant": result})
-    } catch(err) {
-        errorService.resError(res, 500, err)
-    }
-
-});
-
 RestaurantRouter.post('/', [
     check('name').not().isEmpty(),
     check('floor').isInt(),
@@ -85,43 +64,64 @@ RestaurantRouter.post('/', [
 
 });
 
-// RestaurantRouter.put('/', [
-//     check('name').not().isEmpty(),
-//     check('floor').isInt(),
-//     check('lat').isFloat(),
-//     check('lng').isFloat(),
-//     check('category_id').not().isEmpty(),
-//     check('id').not().isEmpty()
-//   ], function(req, res, next) {
+RestaurantRouter.put('/', [
+    check('name').not().isEmpty(),
+    check('floor').isInt(),
+    check('lat').isFloat(),
+    check('lng').isFloat(),
+    check('category_id').not().isEmpty(),
+    check('id').not().isEmpty()
+  ], async (req, res) => {
 
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(422).json({ errors: errors.array() });
-//     }
+    try {
 
-//     const param = {
-//         id: req.body.id,
-//         name : req.body.name,
-//         floor : req.body.floor,
-//         url : req.body.url,
-//         lat : req.body.lat,
-//         lng : req.body.lng,
-//         address : req.body.address,
-//         address_road : req.body.address_road,
-//         category_id : req.body.category_id,
-//         tags : req.body.tags
-//     }
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorService.resValidationError(res, errors);
+        }
 
-//     restaurantService.updateRestaurant(param, function (status, err, result) {
-//         if(err) {
-//             if(status == 500) console.log(err);
-//             res.status(status).json({message : err})
-//         } else {
-//             res.status(200).json({restaurantId : result})
-//         }
+        const param = {
+            id: req.body.id,
+            name : req.body.name,
+            floor : req.body.floor,
+            url : req.body.url,
+            lat : req.body.lat,
+            lng : req.body.lng,
+            address : req.body.address,
+            address_road : req.body.address_road,
+            category_id : req.body.category_id,
+            tags : req.body.tags
+        }
 
-//     })
-// });
+        const result =  await restaurantService.updateRestaurant(param);
+        serverService.response(res, 200, {"restaurantId": result})
+
+    } catch(err) {
+        errorService.resError(res, 500, err)
+    }
+
+});
+
+RestaurantRouter.get('/:id', async (req, res) => {
+
+    try {
+
+        if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
+            return errorService.resError(res, 422, { "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] })
+        }
+
+        const param = {
+            id: req.params.id,
+            user_id : req.user.id
+        }
+
+        const [result] =  await restaurantService.getRestaurant(param);
+        serverService.response(res, 200, {"restaurant": result})
+    } catch(err) {
+        errorService.resError(res, 500, err)
+    }
+
+});
 
 RestaurantRouter.delete('/:id', async (req, res) => {
 

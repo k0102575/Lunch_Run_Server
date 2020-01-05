@@ -56,7 +56,7 @@ class RestaurantService {
             const result = await dbService.query(query, [name, floor, url, lat, lng, address, address_road, category_id])
             const restaurantId = result.insertId
 
-            if(tags.length != 0) {
+            if(!!tags) {
 
                 let tag_multiple_query = 'insert into restaurant_tag (tag_id, restaurant_id) VALUES ?';
                 let values = [];
@@ -74,6 +74,42 @@ class RestaurantService {
         } catch (err) {
             throw new Error(err);
         }
+    }
+
+    async updateRestaurant(param) {
+
+        try {
+
+            const {id, name, floor, url, lat, lng, address, address_road, category_id, tags} = param
+
+            const updateRestaurantQuery = 'update restaurant SET name = ?, floor = ?, url = ?, lat = ?, lng =?, address = ?, address_road = ?, category_id = ? where id = ?'
+            
+            await dbService.query(updateRestaurantQuery, [name, floor, url, lat, lng, address, address_road, category_id, id])
+
+            const deleteTagQuery = 'delete from restaurant_tag where restaurant_id = ?'
+
+            await dbService.query(deleteTagQuery, [id])
+            
+            if(!!tags) {
+
+                let tag_multiple_query = 'insert into restaurant_tag (tag_id, restaurant_id) VALUES ?';
+                let values = [];
+
+                let tagArray = tags.split(",")
+
+                for (var i = 0; i < tagArray.length; i++) {
+                    values.push([tagArray[i].toString(), id.toString()])
+                }
+
+                await dbService.bulkQuery(tag_multiple_query, values)
+            }
+
+            return id
+
+        } catch(err) {
+            throw new Error(err);
+        }
+
     }
 
     async getRestaurant(param) {
@@ -114,148 +150,3 @@ class RestaurantService {
 }
 
 export default RestaurantService;
-
-// module.exports = {
-//     getRestaurantPoint: function (param, callback) {
-
-//         const {category_id, tag_id} = param
-//         let where = ""
-//         if(category_id != undefined) {
-//             where = " and category_id = " + category_id
-//         }
-
-//         if(tag_id != undefined) {
-//             where = " and tag_id = " + tag_id
-//         }
-
-//         connection.query('select r.id, r.lat, r.lng, r.category_id, rc.color\
-//                         from restaurant r\
-//                         left join restaurant_tag rt on r.id = rt.restaurant_id\
-//                         inner join restaurant_category rc on r.category_id = rc.id\
-//                         where delete_datetime is null \
-//                         '+where+'\
-//                         group by r.id', where, function(err, rows, fields){
-
-//             if(err){
-//                 callback(500, err.message, null);
-//             } else {
-//                 callback(null, null, rows);
-//             }
-//         });
-
-//     },
-//     insertRestaurant : function (param, callback) {
-//         try {
-//             const {name, floor, url, lat, lng, address, address_road, category_id, tags} = param
-//             let restaurantId = 0;
-
-//             async.waterfall([
-//                 function(callback) {
-//                     connection.query(' function(err, rows, fields){
-//                         if(err){
-//                             callback(err, null);
-//                         } else {
-//                             restaurantId = rows.insertId
-//                             callback(null, rows.insertId);
-//                         }
-//                     });
-//                 },
-//                 function(restaurantId, callback) {
-
-//                     if(tags.length != 0) {
-
-//                         let tag_multiple_query = 'insert into `restaurant_tag` (`tag_id`, `restaurant_id`) values ? ';
-//                         let values = [];
-
-//                         for (var i = 0; i < tags.length; i++) {
-//                             values.push([tags[i].toString(), restaurantId.toString()])
-//                         }
-
-//                         connection.query(tag_multiple_query, [values], function(err, rows, fields){
-//                             if(err){
-//                                 callback(err, null);
-//                             } else {
-//                                 callback(null, restaurantId);
-//                             }
-//                         });
-
-//                     } else {
-//                         callback(null, restaurantId);
-//                     }
-
-//                 }
-//             ], function (err, restaurantId) {
-//                 if(err) {
-//                     callback(500, err.message, null);
-//                 } else {
-//                     callback(200, null, restaurantId)
-//                 }
-//             });
-
-//         } catch(err) {
-//             callback(500, err.message, null);
-//         }
-
-//     },
-//     updateRestaurant : function (param, callback) {
-//         try {
-//             const {id, name, floor, url, lat, lng, address, address_road, category_id, tags} = param
-
-//             async.waterfall([
-//                 function(callback) {
-//                     connection.query('update restaurant SET name = ?, floor = ?, url = ?, lat = ?, lng =?, address = ?, address_road = ?, category_id = ? where id = ?', [name, floor, url, lat, lng, address, address_road, category_id, id], function(err, rows, fields){
-//                         if(err){
-//                             callback(err, null);
-//                         } else {
-//                             callback(null, id);
-//                         }
-//                     });
-//                 },
-//                 function(id, callback) {
-
-//                     connection.query('delete from restaurant_tag where restaurant_id = ?', id, function(err, rows, fields){
-//                         if(err){
-//                             callback(err, null);
-//                         } else {
-//                             callback(null, id);
-//                         }
-//                     });
-
-//                 },
-//                 function(id, callback) {
-
-//                     if(tags.length != 0) {
-
-//                         let tag_multiple_query = 'insert into `restaurant_tag` (`tag_id`, `restaurant_id`) values ? ';
-//                         let values = [];
-
-//                         for (var i = 0; i < tags.length; i++) {
-//                             values.push([tags[i].toString(), id.toString()])
-//                         }
-
-//                         connection.query(tag_multiple_query, [values], function(err, rows, fields){
-//                             if(err){
-//                                 callback(err, null);
-//                             } else {
-//                                 callback(null, id);
-//                             }
-//                         });
-
-//                     } else {
-//                         callback(null, id);
-//                     }
-
-//                 }
-//             ], function (err, id) {
-//                 if(err) {
-//                     callback(500, err.message, null);
-//                 } else {
-//                     callback(200, null, id)
-//                 }
-//             });
-
-//         } catch(err) {
-//             callback(500, err.message, null);
-//         }
-//     },
-// }
