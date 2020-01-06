@@ -1,17 +1,24 @@
 import express from 'express';
-import reportTypeService from '../service/reportTypeService'
+import { check, validationResult } from 'express-validator';
+import {
+    authMiddlewareService,
+    errorService,
+    serverService,
+    reportTypeService
+} from '../service';
 
 const ReportTypeRouter = express.Router();
 
-ReportTypeRouter.get('/', function(req, res, next) {
+ReportTypeRouter.get('/', async (req, res) => {
 
-    reportTypeService.getType(function (err, result) {
-        if(!err) {
-            res.status(200).json(result);
-        } else {
-            res.status(500).json({message : err});
-        }
-    })
+    try {
+        const result = await reportTypeService.getType()
+
+        serverService.response(res, 200, result)
+    } catch(err) {
+        errorService.resError(res, 500, err);
+    }
+
 });
 
 export default ReportTypeRouter;

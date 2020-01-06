@@ -1,18 +1,17 @@
-const datasource = require('../util/datasource');
-const connection = datasource.getConnection();
+import {
+    dbService
+} from './'
 
-module.exports = {
-    getType : function (callback) {
-        try {
-            connection.query('select * from report_type', function (err, result) {
-                if(err) {
-                    callback(err, null);
-                } else {
-                    callback(null, result);
-                }
-            })    
-        } catch(e) {
-            callback(err, null);
-        }
+class ReportTypeService {
+    constructor() {}
+
+    async getType() {
+        const selectQuery = 'select * from report_type'
+
+        const result = await dbService.query(selectQuery)
+
+        return result;
     }
 }
+
+export default ReportTypeService
