@@ -2,6 +2,10 @@ import {
     dbService
 } from './'
 
+import {
+    ServerError
+} from '../models/ServerError'
+
 class RestaurantService {
     constructor() {}
 
@@ -42,7 +46,7 @@ class RestaurantService {
 
             return data;
         } catch (err) {
-            throw new Error(err);
+            throw new ServerError(err.message, 500);
         }
     }
 
@@ -72,7 +76,7 @@ class RestaurantService {
             
             return restaurantId
         } catch (err) {
-            throw new Error(err);
+            throw new ServerError(err.message, 500);
         }
     }
 
@@ -107,7 +111,7 @@ class RestaurantService {
             return id
 
         } catch(err) {
-            throw new Error(err);
+            throw new ServerError(err.message, 500);
         }
 
     }
@@ -128,7 +132,7 @@ class RestaurantService {
             const data = await dbService.query(query, param)
             return data
         } catch (err) {
-            throw new Error(err);
+            throw new ServerError(err.message, 500);
         }
 
     }
@@ -142,7 +146,7 @@ class RestaurantService {
             const data = await dbService.query(query, values)
             return data
         } catch (err) {
-            throw new Error(err);
+            throw new ServerError(err.message, 500);
         }
 
     }

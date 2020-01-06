@@ -26,7 +26,7 @@ RestaurantRouter.get('/', async (req, res) => {
 
         serverService.response(res, 200, result)
     } catch(err) {
-        errorService.resError(res, 500, err)
+        errorService.resError(res, err);
     }
 });
 
@@ -59,7 +59,7 @@ RestaurantRouter.post('/', [
         const result =  await restaurantService.insertRestaurant(param);
         serverService.response(res, 200, {"restaurantId": result})
     } catch(err) {
-        errorService.resError(res, 500, err)
+        errorService.resError(res, err);
     }
 
 });
@@ -97,7 +97,7 @@ RestaurantRouter.put('/', [
         serverService.response(res, 200, {"restaurantId": result})
 
     } catch(err) {
-        errorService.resError(res, 500, err)
+        errorService.resError(res, err);
     }
 
 });
@@ -118,7 +118,7 @@ RestaurantRouter.get('/:id', async (req, res) => {
         const [result] =  await restaurantService.getRestaurant(param);
         serverService.response(res, 200, {"restaurant": result})
     } catch(err) {
-        errorService.resError(res, 500, err)
+        errorService.resError(res, err);
     }
 
 });
@@ -139,7 +139,7 @@ RestaurantRouter.delete('/:id', async (req, res) => {
         await restaurantService.deleteRestaurant(param);
         serverService.response(res, 200, {"result": true})
     } catch(err) {
-        errorService.resError(res, 500, err)
+        errorService.resError(res, err);
     }
 });
 

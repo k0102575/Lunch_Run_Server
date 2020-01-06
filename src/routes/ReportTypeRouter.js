@@ -16,7 +16,7 @@ ReportTypeRouter.get('/', async (req, res) => {
 
         serverService.response(res, 200, result)
     } catch(err) {
-        errorService.resError(res, 500, err);
+        errorService.resError(res, err);
     }
 
 });

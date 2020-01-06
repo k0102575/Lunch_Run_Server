@@ -2,15 +2,25 @@ import {
     dbService
 } from './'
 
+import {
+    ServerError
+} from '../models/ServerError'
+
 class ReportTypeService {
     constructor() {}
 
     async getType() {
-        const selectQuery = 'select * from report_type'
 
-        const result = await dbService.query(selectQuery)
+        try {
+            const selectQuery = 'select * from report_type'
 
-        return result;
+            const result = await dbService.query(selectQuery)
+    
+            return result;
+        } catch (err) {
+            throw new ServerError(err.message, 500);
+        }
+
     }
 }
 

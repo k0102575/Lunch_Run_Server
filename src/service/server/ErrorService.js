@@ -1,12 +1,13 @@
 class ErrorService {
-    constructor() {
-    }
+    constructor() {}
 
     // TODO DB 에러 로그 로직 추가
+    // TODO 에러 상태 처리 추가 필요
 
-    resError(res, status, err) {
+    resError(res, err) {
         console.error(err.message);
-        res.status(status).json({message : err.message})
+        console.error(err.stack)
+        res.status(err.status).json({error : err.message})
     }
 
     resValidationError(res, errors) {

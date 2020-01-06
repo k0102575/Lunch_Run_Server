@@ -1,17 +1,22 @@
 import express from 'express';
+import {
+    authMiddlewareService,
+    errorService,
+    serverService,
+    restaurantCategoryService
+} from '../service';
 
 const RestaurantCategoryRouter = express.Router();
-const restaurantCategoryService = require('../service/restaurantCategoryService.js');
 
-RestaurantCategoryRouter.get('/', function(req, res, next) {
+RestaurantCategoryRouter.get('/', async (req, res) => {
+    try {
+        
+        const result = await restaurantCategoryService.getCategory();
+        serverService.response(res, 200, result);
 
-    restaurantCategoryService.getCategory(function (err, result) {
-        if(!err) {
-            res.status(200).json(result);
-        } else {
-            res.status(500).json({message : err});
-        }
-    })
+    } catch(err) {
+        errorService.resError(res, err)
+    }
 });
 
 export default RestaurantCategoryRouter;

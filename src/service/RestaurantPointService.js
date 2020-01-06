@@ -2,6 +2,10 @@ import {
     dbService
 } from './'
 
+import {
+    ServerError
+} from '../models/ServerError'
+
 class RestaurantPointService {
     constructor() {}
 
@@ -31,7 +35,7 @@ class RestaurantPointService {
             return result;
 
         } catch (err) {
-            throw new Error(err);
+            throw new ServerError(err.message, 500);
         }
     }
 }
