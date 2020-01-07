@@ -1,136 +1,70 @@
-const datasource = require('../util/datasource');
-const connection = datasource.getConnection();
-const async = require('async');
-const jwt = require('jsonwebtoken');
-const jwtOption = require("../../config/jwt");
+import {
+    dbService,
+    tokenService
+} from './'
 
-module.exports = {
-    signup : function (param, callback) {
+import {
+    ServerError
+} from '../models/ServerError'
+
+class AuthService {
+    constructor() {}
+
+    async signup(param) {
+
         try {
 
             const {email, phone, password, alias} = param
+
+            const selectEmailQuery = 'select * from user where email = ?'
     
-            var tasks = [
-                function (callback) {
-                    connection.query("select * from user where email = ?", email, function (err, result) {
-                        if(typeof result !== 'undefined' && result.length > 0) {
-                            callback(new Error('email'));
-                        } else {
-                            callback(null);
-                        }
-                    })
-                },
-                function (callback) {
-                    connection.query("select * from user where phone = ?", phone, function (err, result) {
-                        if(typeof result !== 'undefined' && result.length > 0) {
-                            callback(new Error('phone'));
-                        } else {
-                            callback(null);
-                        }
-                    })
-                }
-            ];
-            
-            async.series(tasks, function (err, results) {
-                if(!err) {
-                    connection.query('insert into user (email, password, alias, phone) VALUES(?, password(?), ?, ?)', [email, password, alias, phone], function(e, rows, fields){
-                        if(err){
-                            callback(500, err, null);
-                        } else {
-                            callback(null, null, rows.insertId);
-                        }
-                    });
-                } else {
-                    callback(409, err.message, null);
-                }
-            });
-            
-        } catch(err) {
-            callback(500, err.message, null)
-        }
-    },
+            const [emailResult] = await dbService.query(selectEmailQuery, [email])
+            if(!!emailResult) {
+                throw new ServerError('email', 409)
+            }
 
-    login : function (param, callback) {
+            const selectPhoneQuery = 'select * from user where phone = ?'
+    
+            const [phoneResult] = await dbService.query(selectPhoneQuery, [phone])
+            if(!!phoneResult) {
+                throw new ServerError('phone', 409)
+            }
 
-        try {
-            
-            const {email, password} = param
-            
-            async.waterfall([
-                function(callback) {
-                    connection.query("select id, email, alias, phone from user where email = ? and password = password(?)", [email, password], function (e, result) {
-                        if(typeof result !== 'undefined' && result.length > 0) {
-                            callback(null, result[0])
-                        } else {
-                            callback("login failed", null)
-                        }
-                    })
-                },
-                function(user, callback) {
-                    jwt.sign(
-                        {
-                            id: user.id,
-                            alias: user.alias
-                        }, 
-                        jwtOption.secretKey, 
-                        {
-                            expiresIn: '14d',
-                            issuer: user.email,
-                            subject: 'userInfo'
-                        }, (err, token) => {
-                            if(err) {
-                                callback("token failed", null)
-                            } else {
-                                callback(null, token)
-                            }
+            const insertQuery = 'insert into user (email, password, alias, phone) VALUES(?, password(?), ?, ?)'
 
-                        })
+            const result = await dbService.query(insertQuery, [email, password, alias, phone])
 
-                }
-            ], function (err, token) {
-                if(err) {
-                    callback(403, err, null);
-                } else {
-                    callback(200, null, token)
-                }
-            });
+            return result.insertId
 
         } catch(err) {
-            callback(500, err.message, null);
+            throw new ServerError(err.message, err.status)
         }
 
-    },
-
-    check: function (param, callback) {
-        try {
-
-            const {token} = param
-    
-            if(!token) {
-                callback(403, "Not Token", null);
-            }
-    
-            const p = new Promise(
-                (resolve, reject) => {
-                    jwt.verify(token, jwtOption.secretKey, (e, decoded) => {
-                        if(e) reject(e)
-                        resolve(decoded)
-                    })
-                }
-            )
-        
-            const respond = (info) => {
-                callback(200, null, info)
-            }
-        
-            const onerror = (err) => {
-                callback(403, err.message, null);
-            }
-        
-            p.then(respond).catch(onerror)
-    
-        } catch(err) {
-            callback(500, err.message, null);
-        }
     }
+
+    async login(param) {
+
+        try {
+
+            const {email, password} = param
+
+            const selectQuery = 'select id, email, alias, phone from user where email = ? and password = password(?)'
+    
+            const [result] = await dbService.query(selectQuery, [email, password])
+
+            if(!!result) {
+                const token = await tokenService.createToken(result)
+                return token
+            } else {
+                throw new ServerError('login failed', 403)
+            }
+
+        } catch(err) {
+            throw new ServerError(err.message, err.status)
+        }
+
+    }
+
 }
+
+export default AuthService;

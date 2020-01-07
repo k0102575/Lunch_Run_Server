@@ -1,9 +1,13 @@
 import jwt from 'jsonwebtoken';
-import jwtOption from '../../config/jwt';
+import jwtOption from '../../../config/jwt';
 
-import ErrorService from './server/ErrorService';
+import {
+    errorService
+} from '../'
 
-const errorService = new ErrorService();
+import {
+    ServerError
+} from '../../models/ServerError'
 
 class AuthMiddlewareService {
     constructor() {}
@@ -13,7 +17,7 @@ class AuthMiddlewareService {
         const token = req.headers['x-access-token'] || req.query.token
 
         if (!token) {
-            return errorService.resError(res, 403, 'Not Token')
+            return errorService.resError(res, new ServerError('Not Token', 403))
         }
 
         const p = new Promise(
@@ -26,7 +30,7 @@ class AuthMiddlewareService {
         )
 
         const onError = (error) => {
-            return errorService.resError(res, 403, error.message)
+            return errorService.resError(res, new ServerError(error.message, 403))
         }
 
         p.then((decoded) => {
