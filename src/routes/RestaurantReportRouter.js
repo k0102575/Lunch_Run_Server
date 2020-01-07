@@ -1,129 +1,133 @@
 import express from 'express';
-
-const RestaurantReportRouter = express.Router();
-const restaurantReportService = require('../service/restaurantReportService.js');
-const { check, validationResult } = require('express-validator');
+import { check, validationResult } from 'express-validator';
+import {
+    authMiddlewareService,
+    errorService,
+    serverService,
+    restaurantReportService
+} from '../service';
 
 import {
-    authMiddlewareService
-} from '../service';
+    ServerError
+} from '../models/ServerError'
+
+const RestaurantReportRouter = express.Router();
 
 RestaurantReportRouter.use('/', authMiddlewareService.isValidToken)
 RestaurantReportRouter.use('/:id', authMiddlewareService.isValidToken)
 
-RestaurantReportRouter.get('/', function(req, res, next) {
+RestaurantReportRouter.get('/', async (req, res) => {
     
-    const param = {
-        page : req.query.page,
-        user_id : req.user.id
-    }
+    try {
 
-    restaurantReportService.getReportList(param, (status, err, result) => {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json(result)
+        const param = {
+            page : req.query.page,
+            user_id : req.user.id
         }
-    })
+    
+        const result = await restaurantReportService.getReportList(param)
 
-});
-
-RestaurantReportRouter.get('/:id', function(req, res, next) {
-
-    if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
-        return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
+        serverService.response(res, 200, result)
+    } catch(err) {
+        errorService.resError(res, err);
     }
 
-    const param = {
-        id: req.params.id
-    }
-
-    restaurantReportService.getReport(param, function (status, err, result) {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json({"report": result})
-        }
-
-    })
 });
 
 RestaurantReportRouter.post('/', [
     check('restaurant_id').not().isEmpty(),
     check('type_id').not().isEmpty()
-  ], (req, res, next) => {
+  ], async (req, res) => {
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
+    try {
 
-    const param = {
-        content : req.body.content,
-        user_id : req.user.id,
-        restaurant_id : req.body.restaurant_id,
-        type_id : req.body.type_id
-    }
-
-    restaurantReportService.insertReport(param, function (status, err, result) {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json({reportId : result})
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorService.resValidationError(res, errors);
+        }
+    
+        const param = {
+            content : req.body.content,
+            user_id : req.user.id,
+            restaurant_id : req.body.restaurant_id,
+            type_id : req.body.type_id
         }
 
-    })
+        const result = await restaurantReportService.insertReport(param);
+
+        serverService.response(res, 200, {"reportId": result})
+    } catch(err) {
+        errorService.resError(res, err);
+    }
+
 });
 
 RestaurantReportRouter.put('/', [
     check('type_id').not().isEmpty(),
     check('id').not().isEmpty()
-  ], function(req, res, next) {
+  ], async (req, res) => {
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
+    try {
 
-    const param = {
-        content : req.body.content,
-        type_id : req.body.type_id,
-        id : req.body.id
-    }
-
-    restaurantReportService.updateReport(param, function (status, err, result) {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json({restaurantId : result})
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorService.resValidationError(res, errors);
+        }
+    
+        const param = {
+            content : req.body.content,
+            type_id : req.body.type_id,
+            id : req.body.id
         }
 
-    })
+        const result = await restaurantReportService.updateReport(param);
+
+        serverService.response(res, 200, {"reportId": result})
+    } catch(err) {
+        errorService.resError(res, err);
+    }
+
 });
 
-RestaurantReportRouter.delete('/:id', function(req, res, next) {
+RestaurantReportRouter.get('/:id', async (req, res) => {
 
-    if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
-        return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
+    try {
+
+        if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
+            return errorService.resError(res, new ServerError('{ "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" }', 422))
+        }
+    
+        const param = {
+            id: req.params.id
+        }
+    
+        const [result] = await restaurantReportService.getReport(param)
+
+        serverService.response(res, 200, {"report": result})
+    } catch(err) {
+        errorService.resError(res, err);
     }
 
-    const param = {
-        id: req.params.id,
-    }
+});
 
-    restaurantReportService.deleteReport(param, function (status, err, result) {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json({"result": true})
+RestaurantReportRouter.delete('/:id', async (req, res) => {
+
+    try {
+
+        if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
+            return errorService.resError(res, new ServerError('{ "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" }', 422))
         }
 
-    })
+        const param = {
+            id: req.params.id
+        }
+
+        await restaurantReportService.deleteReport(param);
+        serverService.response(res, 200, {"result": true})
+    } catch(err) {
+        errorService.resError(res, err);
+    }
+
 });
 
 export default RestaurantReportRouter;
