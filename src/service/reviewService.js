@@ -1,67 +1,92 @@
-const datasource = require('../util/datasource');
-const connection = datasource.getConnection();
+import {
+    dbService
+} from './'
 
-module.exports = {
-    getReviewList: function (param, callback) {
-        const {restaurant_id, page} = param
-        let row = (page != undefined) ? page : 0
+import {
+    ServerError
+} from '../models/ServerError'
 
-        connection.query('select * from review where delete_datetime is null and restaurant_id = ? limit ? , 10', [restaurant_id, row] , function(err, rows, fields){
-            if(err){
-                callback(500, err.message, null);
-            } else {
-                callback(null, null, rows);
-            }
-        });
+class ReviewService {
+    constructor() {}
 
-    },
-    insertReview : function (param, callback) {
+    async getReviewList(param) {
+
         try {
-            const {rating, comment, user_id, restaurant_id} = param
+            const {
+                restaurant_id,
+                page
+            } = param
+            let row = (page != undefined) ? page : 0
 
-            connection.query("INSERT INTO review (create_datetime, delete_datetime, rating, comment, user_id, restaurant_id) VALUES (now(), NULL, ?, ?, ?, ?)", [rating, comment, user_id, restaurant_id], function(err, rows, fields){
-                if(err){
-                    callback(500, err.message, null);
-                } else {
-                    callback(null, null, rows.insertId);
-                }
-            });
-        } catch(err) {
-            callback(500, err.message, null);
+            const selectQuery = 'select * from review where delete_datetime is null and restaurant_id = ? limit ? , 10'
+
+            const result = await dbService.query(selectQuery, [restaurant_id, row]);
+
+            return result;
+        } catch (err) {
+            throw new ServerError(err.message, 500)
         }
 
-    },
-    updateReview : function (param, callback) {
-        try {
-            const {rating, comment, id} = param
+    }
 
-            connection.query('update review SET rating = ?, comment = ? where id = ?', [rating, comment, id], function(err, rows, fields){
-                if(err){
-                    callback(500, err.message.sqlMessage, null);
-                } else {
-                    callback(null, null, id);
-                }
-            });
-        } catch(err) {
-            callback(500, err.message, null);
-        }
-    },
-    deleteReview : function (param, callback) {
-            
-        try {
-            const {id} = param
+    async insertReview(param) {
 
-            connection.query('update review SET delete_datetime = now() where id = ?', [id], function(err, rows, fields){
-                if(err){
-                    callback(500, err.message.sqlMessage, null);
-                } else {
-                    callback(null, null, id);
-                }
-            });
-        } catch(err) {
-            callback(500, err.message, null);
+        try {
+            const {
+                rating,
+                comment,
+                user_id,
+                restaurant_id
+            } = param;
+
+            const insertQuery = 'INSERT INTO review (create_datetime, delete_datetime, rating, comment, user_id, restaurant_id) VALUES (now(), NULL, ?, ?, ?, ?)';
+
+            const result = await dbService.query(insertQuery, [rating, comment, user_id, restaurant_id])
+
+            return result.insertId;
+        } catch (err) {
+            throw new ServerError(err.message, 500)
         }
-            
+
+    }
+
+    async updateReview(param) {
+
+        try {
+            const {
+                rating,
+                comment,
+                review_id
+            } = param
+
+            const updateQuery = 'update review SET rating = ?, comment = ? where id = ?';
+
+            const result = await dbService.query(updateQuery, [rating, comment, review_id])
+
+            return review_id;
+        } catch (err) {
+            throw new ServerError(err.message, 500)
+        }
+
+    }
+
+
+    async deleteReview(param) {
+        try {
+            const {
+                review_id
+            } = param
+
+            const deleteQuery = 'update review SET delete_datetime = now() where id = ?';
+
+            const result = await dbService.query(deleteQuery, [review_id])
+
+            return result;
+        } catch (err) {
+            throw new ServerError(err.message, 500)
+        }
     }
 
 }
+
+export default ReviewService;
