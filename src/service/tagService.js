@@ -1,18 +1,27 @@
-const datasource = require('../util/datasource');
-const connection = datasource.getConnection();
+import {
+    dbService
+} from './'
 
-module.exports = {
-    getCategory : function (callback) {
+import {
+    ServerError
+} from '../models/ServerError'
+
+class TagService {
+    constructor() {}
+
+    async getCategory() {
+
         try {
-            connection.query('select * from tag', function (err, result) {
-                if(err) {
-                    callback(err, null);
-                } else {
-                    callback(null, result);
-                }
-            })    
-        } catch(e) {
-            callback(err, null);
+            const selectQuery = 'select * from tag';
+
+            const result = await dbService.query(selectQuery);
+
+            return result;
+        } catch (err) {
+            throw new ServerError(err.message, 500)
         }
+
     }
 }
+
+export default TagService

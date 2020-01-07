@@ -1,17 +1,24 @@
 import express from 'express';
 
+import {
+    authMiddlewareService,
+    errorService,
+    serverService,
+    tagService
+} from '../service';
+
 const TagRouter = express.Router();
-const tagService = require('../service/tagService.js');
 
-TagRouter.get('/', function(req, res, next) {
+TagRouter.get('/', async (req, res) => {
 
-    tagService.getCategory(function (err, result) {
-        if(!err) {
-            res.status(200).json(result);
-        } else {
-            res.status(500).json({message : err});
-        }
-    })
+    try {
+        const result = await tagService.getCategory();
+
+        serverService.response(res, 200, result)
+    } catch(err) {
+        errorService.resError(res, err)
+    }
+    
 });
 
 export default TagRouter;
