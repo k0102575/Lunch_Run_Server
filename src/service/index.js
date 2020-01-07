@@ -9,6 +9,7 @@ import RestaurantCategoryService from './RestaurantCategoryService';
 import TagService from './TagService';
 import ReviewService from './ReviewService';
 import RestaurantReportService from './RestaurantReportService'
+import RestaurantFavoriteService from './RestaurantFavoriteService'
 
 export const authMiddlewareService = new AuthMiddlewareService();
 export const dbService = new DatabaseService();
@@ -22,3 +23,4 @@ export const restaurantCategoryService = new RestaurantCategoryService();
 export const tagService = new TagService();
 export const reviewService = new ReviewService();
 export const restaurantReportService = new RestaurantReportService();
+export const restaurantFavoriteService = new RestaurantFavoriteService();

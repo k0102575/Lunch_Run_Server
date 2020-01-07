@@ -457,7 +457,7 @@ paths:
         type: string
       responses:
         200:
-          description: '{"result": true}'
+          description: '{"favoriteId": 입력된 즐겨찾기 아이디}'
         403:
           description: '{"message" : "Not Token || invalid token"}'
         422:
@@ -584,7 +584,7 @@ paths:
     put:
       summary: 식당 신고 수정
       tags:
-      - restaurantreport
+      - restaurant/report
       parameters:
       - in: "header"
         name: "x-access-token"

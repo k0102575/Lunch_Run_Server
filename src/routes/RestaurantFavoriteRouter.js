@@ -1,75 +1,79 @@
 import express from 'express';
-
-const RestaurantFavoriteRouter = express.Router();
-const restaurantFavoriteService = require('../service/restaurantFavoriteService.js');
+import { check, validationResult } from 'express-validator';
+import {
+    authMiddlewareService,
+    errorService,
+    serverService,
+    restaurantFavoriteService
+} from '../service';
 
 import {
-    authMiddlewareService
-} from '../service';
+    ServerError
+} from '../models/ServerError'
+
+const RestaurantFavoriteRouter = express.Router();
 
 RestaurantFavoriteRouter.use('/', authMiddlewareService.isValidToken)
 RestaurantFavoriteRouter.use('/:id', authMiddlewareService.isValidToken)
 
-RestaurantFavoriteRouter.get('/', function(req, res, next) {
+RestaurantFavoriteRouter.get('/', async (req, res ) => {
     
-    const param = {
-        page : req.query.page,
-        user_id : req.user.id
-    }
+    try {
 
-    restaurantFavoriteService.getRestaurantFavoriteList(param, (status, err, result) => {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json(result)
+        const param = {
+            page : req.query.page,
+            user_id : req.user.id
         }
-    })
+    
+        const result = await restaurantFavoriteService.getRestaurantFavoriteList(param)
+
+        serverService.response(res, 200, result)
+    } catch(err) {
+        errorService.resError(res, err);
+    }
 
 });
 
-RestaurantFavoriteRouter.post('/:id', function(req, res, next) {
+RestaurantFavoriteRouter.post('/:id', async (req, res) => {
 
-    if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
-        return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
-    }
+    try {
 
-    const param = {
-        id: req.params.id,
-        user_id : req.user.id
-    }
-
-    restaurantFavoriteService.insertRestaurantFavorite(param, function (status, err, result) {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json({"result": true})
+        if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
+            return errorService.resError(res, new ServerError('{ "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" }', 422))
         }
 
-    })
+        const param = {
+            id: req.params.id,
+            user_id : req.user.id
+        }
+
+        const result = await restaurantFavoriteService.insertRestaurantFavorite(param);
+        serverService.response(res, 200, {"favoriteId": result})
+    } catch(err) {
+        errorService.resError(res, err);
+    }
+
 });
 
-RestaurantFavoriteRouter.delete('/:id', function(req, res, next) {
+RestaurantFavoriteRouter.delete('/:id', async (req, res) => {
 
-    if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
-        return res.status(422).json({ "errors": [ { "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" } ] });
-    }
+    try {
 
-    const param = {
-        id: req.params.id,
-        user_id : req.user.id
-    }
-
-    restaurantFavoriteService.deleteRestaurantFavorite(param, function (status, err, result) {
-        if(err) {
-            if(status == 500) console.log(err);
-            res.status(status).json({message : err})
-        } else {
-            res.status(200).json({"result": true})
+        if(req.params.id == undefined || !Number.isInteger(parseInt(req.params.id))) {
+            return errorService.resError(res, new ServerError('{ "value": "***", "msg": "Invalid value", "param": "id", "location": "Path Variable" }', 422))
         }
 
-    })
+        const param = {
+            id: req.params.id,
+            user_id : req.user.id
+        }
+
+        await restaurantFavoriteService.deleteRestaurantFavorite(param);
+        serverService.response(res, 200, {"result": true})
+    } catch(err) {
+        errorService.resError(res, err);
+    }
+    
 });
 
 export default RestaurantFavoriteRouter;
