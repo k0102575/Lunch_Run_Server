@@ -12,6 +12,40 @@ const RestaurantRouter = express.Router();
 // RestaurantRouter.use('/', authMiddlewareService.isValidToken)
 RestaurantRouter.use('/:id', authMiddlewareService.isValidToken)
 
+/**
+ * @swagger
+ *  paths:
+ *    /login:
+ *      post:
+ *        tags:
+ *        - "Auth"
+ *        summary: "Login process"
+ *        description: ""
+ *        consumes:
+ *        - "application/json"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: "body"
+ *          name: "body"
+ *          description: "로그인 계정 정보와 서비스 정보를 전달"
+ *          required: true
+ *          schema:
+ *            $ref: "#/definitions/Auth_request"
+ *        responses:
+ *          200:
+ *            description: "로그인 결과"
+ *            schema:
+ *              $ref: "#/definitions/Auth_response"
+ *          400:
+ *            description: "잘못된 데이터"
+ *            schema:
+ *              $ref: "#/definitions/Response_error"
+ *          500:
+ *            description: "로그인 오류 & 실패"
+ *            schema:
+ *              $ref: "#/definitions/Response_error"
+ */
 RestaurantRouter.get('/', async (req, res) => {
     
     try {

@@ -7,858 +7,858 @@ info:
 host: 54.180.89.60
 basePath: /
   
-paths:
-  /auth/signup:
-    post:
-      summary: 회원가입
-      tags: 
-      - "Auth"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/user"
-      responses:
-        200:
-          description: "{userId : 회원가입된 유저의 아이디}"
-        409:
-          description: '중복된 회원 정보로 가입 시도시 :   {"message" : "email || phone"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "email || phone || alias || phone",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+# paths:
+#   /auth/signup:
+#     post:
+#       summary: 회원가입
+#       tags: 
+#       - "Auth"
+#       parameters:
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#           $ref: "#/definitions/user"
+#       responses:
+#         200:
+#           description: "{userId : 회원가입된 유저의 아이디}"
+#         409:
+#           description: '중복된 회원 정보로 가입 시도시 :   {"message" : "email || phone"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "email || phone || alias || phone",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
           
-  /auth/login:
-    post:
-      summary: 로그인 토큰 받아오기
-      tags: 
-      - "Auth"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: object
-          properties:
-            email:
-              type: string
+#   /auth/login:
+#     post:
+#       summary: 로그인 토큰 받아오기
+#       tags: 
+#       - "Auth"
+#       parameters:
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#           type: object
+#           properties:
+#             email:
+#               type: string
 
-            password:
-              type: string
+#             password:
+#               type: string
 
-      responses:
-        200:
-          description: "{token : 생성된 토큰}"
-        403:
-          description: '회원 정보에 맞지 않은 값으로 로그인 시도시 : {"message" : "login failed || token failed"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "email || password",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       responses:
+#         200:
+#           description: "{token : 생성된 토큰}"
+#         403:
+#           description: '회원 정보에 맞지 않은 값으로 로그인 시도시 : {"message" : "login failed || token failed"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "email || password",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
           
-  /auth/check:
-    post:
-      summary: 로그인 토큰 체크
-      tags: 
-      - "Auth"
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
+#   /auth/check:
+#     post:
+#       summary: 로그인 토큰 체크
+#       tags: 
+#       - "Auth"
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
 
-      responses:
-        200:
-          description: '{"userInfo": {회원 정보} }'
-        403:
-          description: '토큰이 없거나 토큰이 맞지 않을때 : {"message" : "Not Token || invalid token"}'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       responses:
+#         200:
+#           description: '{"userInfo": {회원 정보} }'
+#         403:
+#           description: '토큰이 없거나 토큰이 맞지 않을때 : {"message" : "Not Token || invalid token"}'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
 
-  /restaurant/category:
-    get:
-      summary: 식당 카테고리 정보 리스트
-      tags:
-      - restaurant/category
-      responses:
-        200:
-          description: "카테고리 리스트"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/restaurant_category"
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#   /restaurant/category:
+#     get:
+#       summary: 식당 카테고리 정보 리스트
+#       tags:
+#       - restaurant/category
+#       responses:
+#         200:
+#           description: "카테고리 리스트"
+#           schema:
+#             type: "array"
+#             items:
+#               $ref: "#/definitions/restaurant_category"
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
 
-  /restaurant/point:
-    get:
-      summary: 식당 지도 포인트 정보
-      tags:
-      - restaurant/point
-      parameters:
-        - in: "header"
-          name: "x-access-token"
-          type: string
-        - in: query
-          name: category_id
-          required: false
-          schema:
-            type: integer
-        - in: query
-          name: tag_id
-          required: false
-          schema:
-            type: integer
-      responses:
-        200:
-          description: '[{
-            "id": **, 
-            "lat": **, 
-            "lng": ***, 
-            "category_id": *,
-            "color": *
-          }]'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /restaurant/point:
+#     get:
+#       summary: 식당 지도 포인트 정보
+#       tags:
+#       - restaurant/point
+#       parameters:
+#         - in: "header"
+#           name: "x-access-token"
+#           type: string
+#         - in: query
+#           name: category_id
+#           required: false
+#           schema:
+#             type: integer
+#         - in: query
+#           name: tag_id
+#           required: false
+#           schema:
+#             type: integer
+#       responses:
+#         200:
+#           description: '[{
+#             "id": **, 
+#             "lat": **, 
+#             "lng": ***, 
+#             "category_id": *,
+#             "color": *
+#           }]'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
           
-  /restaurant:
-    get:
-      summary: 식당 리스트
-      tags:
-      - restaurant
-      parameters:
-        - in: "header"
-          name: "x-access-token"
-          type: string
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-        - in: query
-          name: category_id
-          required: false
-          schema:
-            type: integer
-        - in: query
-          name: tag_id
-          required: false
-          schema:
-            type: integer
-      responses:
-        200:
-          description: '[{
-            "id": **, 
-            "name": ***, 
-            "floor": **, 
-            "url": "http://place.map.kakao.com/******", 
-            "lat": ***, 
-            "lng": ***, 
-            "address": "*****", 
-            "address_road": "*****", 
-            "category_id": *, 
-            "rating": *, 
-            "favorite" : "0 || 1", 
-            "tag" : ***
-          }]'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /restaurant:
+#     get:
+#       summary: 식당 리스트
+#       tags:
+#       - restaurant
+#       parameters:
+#         - in: "header"
+#           name: "x-access-token"
+#           type: string
+#         - in: query
+#           name: page
+#           required: false
+#           schema:
+#             type: integer
+#         - in: query
+#           name: category_id
+#           required: false
+#           schema:
+#             type: integer
+#         - in: query
+#           name: tag_id
+#           required: false
+#           schema:
+#             type: integer
+#       responses:
+#         200:
+#           description: '[{
+#             "id": **, 
+#             "name": ***, 
+#             "floor": **, 
+#             "url": "http://place.map.kakao.com/******", 
+#             "lat": ***, 
+#             "lng": ***, 
+#             "address": "*****", 
+#             "address_road": "*****", 
+#             "category_id": *, 
+#             "rating": *, 
+#             "favorite" : "0 || 1", 
+#             "tag" : ***
+#           }]'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-    post:
-      summary: 식당 정보 입력
-      tags:
-      - restaurant
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-        type: object
-        properties:
-          name:
-            type: string
-            format: VARCHAR(45)
+#     post:
+#       summary: 식당 정보 입력
+#       tags:
+#       - restaurant
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#         type: object
+#         properties:
+#           name:
+#             type: string
+#             format: VARCHAR(45)
             
-          floor:
-            type: integer
+#           floor:
+#             type: integer
             
-          url:
-            type: string
-            format: TEXT
+#           url:
+#             type: string
+#             format: TEXT
             
-          lat:
-            type: number
-            format: FLOAT
+#           lat:
+#             type: number
+#             format: FLOAT
             
-          lng:
-            type: number
-            format: FLOAT
+#           lng:
+#             type: number
+#             format: FLOAT
           
-          address:
-            type: string
-            format: VARCHAR(255)
-            default: null
+#           address:
+#             type: string
+#             format: VARCHAR(255)
+#             default: null
             
-          address_road:
-            type: string
-            format: VARCHAR(255)
-            default: null
+#           address_road:
+#             type: string
+#             format: VARCHAR(255)
+#             default: null
           
-          category_id:
-            type: integer
+#           category_id:
+#             type: integer
           
-          tags:
-            type: array
-            items:
-              type: integer
+#           tags:
+#             type: array
+#             items:
+#               type: integer
           
-      responses:
-        200:
-          description: "{restaurantId : 입력된 식당의 아이디}"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "name || floor || lat || lng || category_id",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#       responses:
+#         200:
+#           description: "{restaurantId : 입력된 식당의 아이디}"
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "name || floor || lat || lng || category_id",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
         
-    put:
-      summary: 식당 정보 수정
-      tags:
-      - restaurant
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-        type: object
-        properties:
-          id:
-            type: integer
+#     put:
+#       summary: 식당 정보 수정
+#       tags:
+#       - restaurant
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#         type: object
+#         properties:
+#           id:
+#             type: integer
 
-          name:
-            type: string
-            format: VARCHAR(45)
+#           name:
+#             type: string
+#             format: VARCHAR(45)
             
-          floor:
-            type: integer
+#           floor:
+#             type: integer
             
-          url:
-            type: string
-            format: TEXT
+#           url:
+#             type: string
+#             format: TEXT
             
-          lat:
-            type: number
-            format: FLOAT
+#           lat:
+#             type: number
+#             format: FLOAT
             
-          lng:
-            type: number
-            format: FLOAT
+#           lng:
+#             type: number
+#             format: FLOAT
           
-          address:
-            type: string
-            format: VARCHAR(255)
+#           address:
+#             type: string
+#             format: VARCHAR(255)
             
-          address_road:
-            type: string
-            format: VARCHAR(255)
+#           address_road:
+#             type: string
+#             format: VARCHAR(255)
           
-          category_id:
-            type: integer
+#           category_id:
+#             type: integer
           
-          tags:
-            type: array
-            items:
-              type: integer
+#           tags:
+#             type: array
+#             items:
+#               type: integer
 
-      responses:
-        200:
-          description: "{restaurantId : 변경된 식당의 아이디}"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "name || floor || lat || lng || category_id || id",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#       responses:
+#         200:
+#           description: "{restaurantId : 변경된 식당의 아이디}"
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "name || floor || lat || lng || category_id || id",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
         
-  /restaurant/{id}:
-    get:
-      summary: 식당 정보 가져오기
-      tags:
-      - restaurant
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      responses:
-        200:
-          description: '{
-            "restaurant": {
-              "id": ***,
-              "name": ***,
-              "floor": ***,
-              "url": "http://place.map.kakao.com/******",
-              "lat": ***,
-              "lng": ***,
-              "address": *****,
-              "address_road": *****,
-              "category_id": *,
-              "rating": **,
-              "favorite": 0 || 1,
-              "tag": ***
-              }
-            }'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "Path Variable"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /restaurant/{id}:
+#     get:
+#       summary: 식당 정보 가져오기
+#       tags:
+#       - restaurant
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       responses:
+#         200:
+#           description: '{
+#             "restaurant": {
+#               "id": ***,
+#               "name": ***,
+#               "floor": ***,
+#               "url": "http://place.map.kakao.com/******",
+#               "lat": ***,
+#               "lng": ***,
+#               "address": *****,
+#               "address_road": *****,
+#               "category_id": *,
+#               "rating": **,
+#               "favorite": 0 || 1,
+#               "tag": ***
+#               }
+#             }'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "Path Variable"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-    delete:
-      summary: 식당 정보 삭제
-      tags:
-      - restaurant
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      responses:
-        200:
-          description: '{"result": true}'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "Path Variable"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#     delete:
+#       summary: 식당 정보 삭제
+#       tags:
+#       - restaurant
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       responses:
+#         200:
+#           description: '{"result": true}'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "Path Variable"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-  /restaurant/favorite:
-    get:
-      summary: 내가 좋아하는 식당 리스트
-      tags:
-      - restaurant/favorite
-      parameters:
-        - in: "header"
-          name: "x-access-token"
-          type: string
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-      responses:
-        200:
-          description: '[{
-            "id": **, 
-            "name": ***, 
-            "floor": **, 
-            "url": "http://place.map.kakao.com/******", 
-            "lat": ***, 
-            "lng": ***, 
-            "address": "*****", 
-            "address_road": "*****", 
-            "category_id": *, 
-            "rating": *, 
-            "favorite" : "1", 
-            "tag" : ***
-          }]'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /restaurant/favorite:
+#     get:
+#       summary: 내가 좋아하는 식당 리스트
+#       tags:
+#       - restaurant/favorite
+#       parameters:
+#         - in: "header"
+#           name: "x-access-token"
+#           type: string
+#         - in: query
+#           name: page
+#           required: false
+#           schema:
+#             type: integer
+#       responses:
+#         200:
+#           description: '[{
+#             "id": **, 
+#             "name": ***, 
+#             "floor": **, 
+#             "url": "http://place.map.kakao.com/******", 
+#             "lat": ***, 
+#             "lng": ***, 
+#             "address": "*****", 
+#             "address_road": "*****", 
+#             "category_id": *, 
+#             "rating": *, 
+#             "favorite" : "1", 
+#             "tag" : ***
+#           }]'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-  /restaurant/favorite/{id}:
-    post:
-      summary: 내가 좋아하는 식당 추가
-      tags:
-      - restaurant/favorite
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      responses:
-        200:
-          description: '{"favoriteId": 입력된 즐겨찾기 아이디}'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "Path Variable"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /restaurant/favorite/{id}:
+#     post:
+#       summary: 내가 좋아하는 식당 추가
+#       tags:
+#       - restaurant/favorite
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       responses:
+#         200:
+#           description: '{"favoriteId": 입력된 즐겨찾기 아이디}'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "Path Variable"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-    delete:
-      summary: 내가 좋아하는 식당 삭제
-      tags:
-      - restaurant/favorite
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      responses:
-        200:
-          description: '{"result": true}'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "Path Variable"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#     delete:
+#       summary: 내가 좋아하는 식당 삭제
+#       tags:
+#       - restaurant/favorite
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       responses:
+#         200:
+#           description: '{"result": true}'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "Path Variable"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-  /restaurant/report:
-    get:
-      summary: 내가 신고한 식당 리스트
-      tags:
-      - restaurant/report
-      parameters:
-        - in: "header"
-          name: "x-access-token"
-          type: string
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-      responses:
-        200:
-          description: '[{
-            "id": **,
-            "reportType": **,
-            "reportText": *****,
-            "restrauntName": *****,
-            "restaurantAddress": ******
-          }]'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /restaurant/report:
+#     get:
+#       summary: 내가 신고한 식당 리스트
+#       tags:
+#       - restaurant/report
+#       parameters:
+#         - in: "header"
+#           name: "x-access-token"
+#           type: string
+#         - in: query
+#           name: page
+#           required: false
+#           schema:
+#             type: integer
+#       responses:
+#         200:
+#           description: '[{
+#             "id": **,
+#             "reportType": **,
+#             "reportText": *****,
+#             "restrauntName": *****,
+#             "restaurantAddress": ******
+#           }]'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-    post:
-      summary: 식당 신고 등록
-      tags:
-      - restaurant/report
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-        type: object
-        properties:
-          content:
-            type: string
-            format: TEXT
-            default: null
+#     post:
+#       summary: 식당 신고 등록
+#       tags:
+#       - restaurant/report
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#         type: object
+#         properties:
+#           content:
+#             type: string
+#             format: TEXT
+#             default: null
 
-          restaurant_id:
-            type: integer
+#           restaurant_id:
+#             type: integer
 
-          type_id:
-            type: integer
+#           type_id:
+#             type: integer
           
-      responses:
-        200:
-          description: "{reportId : 입력된 신고 아이디}"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "restaurant_id || type_id",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#       responses:
+#         200:
+#           description: "{reportId : 입력된 신고 아이디}"
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "restaurant_id || type_id",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
         
-    put:
-      summary: 식당 신고 수정
-      tags:
-      - restaurant/report
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-        type: object
-        properties:
-          content:
-            type: string
-            format: TEXT
-            default: null
+#     put:
+#       summary: 식당 신고 수정
+#       tags:
+#       - restaurant/report
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#         type: object
+#         properties:
+#           content:
+#             type: string
+#             format: TEXT
+#             default: null
 
-          type_id:
-            type: integer
+#           type_id:
+#             type: integer
 
-          id:
-            type: integer
+#           id:
+#             type: integer
           
-      responses:
-        200:
-          description: "{reportId : 수정된 신고 아이디}"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "type_id || id",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#       responses:
+#         200:
+#           description: "{reportId : 수정된 신고 아이디}"
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "type_id || id",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
         
-  /restaurant/report/{id}:
-    get:
-      summary: 식당 신고 정보 가져오기
-      tags:
-      - restaurant/report
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      responses:
-        200:
-          description: '{
-              "report": {
-                "id": **,
-                "content": *****,
-                "reportType": **,
-                "reportText": *****
-              }
-            }'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "Path Variable"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /restaurant/report/{id}:
+#     get:
+#       summary: 식당 신고 정보 가져오기
+#       tags:
+#       - restaurant/report
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       responses:
+#         200:
+#           description: '{
+#               "report": {
+#                 "id": **,
+#                 "content": *****,
+#                 "reportType": **,
+#                 "reportText": *****
+#               }
+#             }'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "Path Variable"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-    delete:
-      summary: 신고 삭제
-      tags:
-      - restaurant/report
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      responses:
-        200:
-          description: '{"result": true}'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "Path Variable"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#     delete:
+#       summary: 신고 삭제
+#       tags:
+#       - restaurant/report
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       responses:
+#         200:
+#           description: '{"result": true}'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "Path Variable"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-  /review:
-    get:
-      summary: 리뷰 리스트
-      tags:
-      - review
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: false
-        type: object
-        properties:
-          restaurant_id:
-            type: integer
-          page:
-            type: integer
-      responses:
-        200:
-          description: '[{"id": **,"create_datetime": "****-**-** **:**:**","delete_datetime": null,"rating": *,"comment": "*****","user_id": ***,"restaurant_id": ***}]'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /review:
+#     get:
+#       summary: 리뷰 리스트
+#       tags:
+#       - review
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       - in: "body"
+#         name: "body"
+#         required: false
+#         type: object
+#         properties:
+#           restaurant_id:
+#             type: integer
+#           page:
+#             type: integer
+#       responses:
+#         200:
+#           description: '[{"id": **,"create_datetime": "****-**-** **:**:**","delete_datetime": null,"rating": *,"comment": "*****","user_id": ***,"restaurant_id": ***}]'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-    post:
-      summary: 리뷰 정보 입력
-      tags:
-      - review
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/review"
-      responses:
-        200:
-          description: "{reviewId : 입력된 리뷰 아이디}"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "rating || restaurant_id",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#     post:
+#       summary: 리뷰 정보 입력
+#       tags:
+#       - review
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#           $ref: "#/definitions/review"
+#       responses:
+#         200:
+#           description: "{reviewId : 입력된 리뷰 아이디}"
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "rating || restaurant_id",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
         
-    put:
-      summary: 리뷰 정보 수정
-      tags:
-      - review
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/review"
-      responses:
-        200:
-          description: "{restaurantId : 변경된 리뷰의 아이디}"
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "rating || id",
-                                    "location": "body"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#     put:
+#       summary: 리뷰 정보 수정
+#       tags:
+#       - review
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       - in: "body"
+#         name: "body"
+#         required: true
+#         schema:
+#           $ref: "#/definitions/review"
+#       responses:
+#         200:
+#           description: "{restaurantId : 변경된 리뷰의 아이디}"
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "rating || id",
+#                                     "location": "body"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-  /review/{id}:
-    delete:
-      summary: 리뷰 정보 삭제
-      tags:
-      - review
-      parameters:
-      - in: "header"
-        name: "x-access-token"
-        type: string
-      responses:
-        200:
-          description: '{"result": true}'
-        403:
-          description: '{"message" : "Not Token || invalid token"}'
-        422:
-          description: 'parameter value 유효성 체크 : {
-                            "errors": [
-                                {
-                                    "value": "***",
-                                    "msg": "Invalid value",
-                                    "param": "id",
-                                    "location": "Path Variable"
-                                }
-                            ]
-                        }'
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
-      security:
-        - api_key: []
+#   /review/{id}:
+#     delete:
+#       summary: 리뷰 정보 삭제
+#       tags:
+#       - review
+#       parameters:
+#       - in: "header"
+#         name: "x-access-token"
+#         type: string
+#       responses:
+#         200:
+#           description: '{"result": true}'
+#         403:
+#           description: '{"message" : "Not Token || invalid token"}'
+#         422:
+#           description: 'parameter value 유효성 체크 : {
+#                             "errors": [
+#                                 {
+#                                     "value": "***",
+#                                     "msg": "Invalid value",
+#                                     "param": "id",
+#                                     "location": "Path Variable"
+#                                 }
+#                             ]
+#                         }'
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#       security:
+#         - api_key: []
 
-  /tag:
-    get:
-      summary: 태그 리스트
-      tags:
-      - tag
-      responses:
-        200:
-          description: "태그 리스트"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/restaurant_category"
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#   /tag:
+#     get:
+#       summary: 태그 리스트
+#       tags:
+#       - tag
+#       responses:
+#         200:
+#           description: "태그 리스트"
+#           schema:
+#             type: "array"
+#             items:
+#               $ref: "#/definitions/restaurant_category"
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
   
-  /report/type:
-    get:
-      summary: 허위 신고 타입 리스트
-      tags:
-      - report/type
-      responses:
-        200:
-          description: "허위 신고 타입 리스트"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/report_type"
-        500:
-          description: '그 외의 에러 발생시 : {"message" : "Exception"}'
+#   /report/type:
+#     get:
+#       summary: 허위 신고 타입 리스트
+#       tags:
+#       - report/type
+#       responses:
+#         200:
+#           description: "허위 신고 타입 리스트"
+#           schema:
+#             type: "array"
+#             items:
+#               $ref: "#/definitions/report_type"
+#         500:
+#           description: '그 외의 에러 발생시 : {"message" : "Exception"}'
         
 definitions:
   user:
