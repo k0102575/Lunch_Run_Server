@@ -11,40 +11,49 @@ class RestaurantService {
 
     async getRestaurantList(param) {
         try {
+
             const {
                 page,
                 user_id,
                 category_id,
                 tag_id
             } = param
-            let categoryWhere = ''
-            let tagWhere = ''
-            if (category_id != undefined) {
-                categoryWhere += ' and category_id = ' + category_id
-            }
-            if (tag_id != undefined) {
-                tagWhere += 'inner join (\
-                    select sr.id\
-                    from restaurant sr \
-                    inner join restaurant_tag rt on sr.id = rt.restaurant_id\
-                    where rt.tag_id = ' + tag_id + '\
-                ) as sur on sur.id = r.id'
-            }
 
-            let row = (page != undefined) ? page : 0
-
-            const data = dbService.query('select r.id, r.name, r.floor, r.url, r.lat, r.lng, r.address, r.address_road, r.category_id, \
-            ifnull(round((select avg(rating) from review re where re.restaurant_id = r.id ),1), 0) as rating,\
-            ifnull((select count(*) from restaurant_favorite rf where rf.restaurant_id = r.id and rf.user_id = ' + user_id + '), 0) as favorite,\
-            group_concat(t.name) as tag\
-            from restaurant r\
-            left join restaurant_tag rt on r.id = rt.restaurant_id\
-            left join tag t on rt.tag_id = t.id\
-            ' + tagWhere + '\
-            where r.delete_datetime is null ' + categoryWhere + '\
-            group by r.id limit ' + (row * 10) + ' ,10')
+            let data = dbService.query("call sp_restaurant_list()")
 
             return data;
+
+            // let categoryWhere = ''
+            // let tagWhere = ''
+            // if (category_id != undefined) {
+            //     categoryWhere += ' and category_id = ' + category_id
+            // }
+            // if (tag_id != undefined) {
+            //     tagWhere += 'inner join (\
+            //         select sr.id\
+            //         from restaurant sr \
+            //         inner join restaurant_tag rt on sr.id = rt.restaurant_id\
+            //         where rt.tag_id = ' + tag_id + '\
+            //     ) as sur on sur.id = r.id'
+            // }
+
+            // let row = (page != undefined) ? page : 0
+
+            // const data = dbService.query('select r.id, r.name, r.floor, r.url, r.lat, r.lng, r.address, r.address_road, r.category_id, \
+            // ifnull(round((select avg(rating) from review re where re.restaurant_id = r.id ),1), 0) as rating,\
+            // ifnull((select count(*) from restaurant_favorite rf where rf.restaurant_id = r.id and rf.user_id = ' + user_id + '), 0) as favorite,\
+            // group_concat(t.name) as tag\
+            // from restaurant r\
+            // left join restaurant_tag rt on r.id = rt.restaurant_id\
+            // left join tag t on rt.tag_id = t.id\
+            // ' + tagWhere + '\
+            // where r.delete_datetime is null ' + categoryWhere + '\
+            // group by r.id limit ' + (row * 10) + ' ,10')
+
+            // return data;
+
+            
+
         } catch (err) {
             throw new ServerError(err.message, 500);
         }

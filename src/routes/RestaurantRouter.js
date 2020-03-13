@@ -9,20 +9,24 @@ import {
 
 const RestaurantRouter = express.Router();
 
-RestaurantRouter.use('/', authMiddlewareService.isValidToken)
+// RestaurantRouter.use('/', authMiddlewareService.isValidToken)
 RestaurantRouter.use('/:id', authMiddlewareService.isValidToken)
 
 RestaurantRouter.get('/', async (req, res) => {
     
     try {
-        const param = {
-            page : req.query.page,
-            user_id : req.user.id,
-            category_id : req.query.category_id,
-            tag_id : req.query.tag_id
-        }
+
+        const param = {}
+        // const param = {
+        //     page : req.query.page,
+        //     user_id : req.user.id,
+        //     category_id : req.query.category_id,
+        //     tag_id : req.query.tag_id
+        // }
     
-        const result = await restaurantService.getRestaurantList(param)
+        const [result] = await restaurantService.getRestaurantList(param);
+
+        console.log(result)
 
         serverService.response(res, 200, result)
     } catch(err) {
